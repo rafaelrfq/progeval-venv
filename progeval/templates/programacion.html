@@ -1,0 +1,59 @@
+{% extends './base_prog.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="display-4">Programación de presentación de proyectos</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<form action="" method="POST" autocomplete="off">
+    {{ formset.errors }}
+    {{ form.non_form_errors }}
+    {{ form.errors }}
+    {{ form.non_field_errors }}
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.fecha|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.estado|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.rubrica|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.jurado|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.presidenteJurado|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.proyecto|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Registrar
+            </button>
+        </div>
+        <div class="col-md-7">
+            <a href="{% url 'prog_list' %}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-list"></i>
+                Ir a lista de programaciones
+            </a>
+        </div>
+    </div>
+    
+</form>
+{% endblock content %}

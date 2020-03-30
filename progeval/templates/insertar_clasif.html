@@ -1,0 +1,29 @@
+{% extends './base_prog.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="display-4">Insertar nueva clasificación</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<form action="" method="post" autocomplete="off">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-12">
+            {{ form.nombre|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Registrar
+            </button>
+        </div>
+        <div class="col-md-8">
+            <a href="{% url 'clasif_list' %}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-list"></i>
+                Ir a listado de clasificaciones
+            </a>
+        </div>
+    </div>
+    
+</form>
+{% endblock content %}

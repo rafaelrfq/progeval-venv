@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>PDF Evaluación</title>
+    <style type="text/css">
+        body {
+            font-weight: 200;
+            font-size: 14px;
+        }
+        .header {
+            font-size: 20px;
+            font-weight: 100;
+            text-align: center;
+            color: #007cae;
+        }
+        .title {
+            font-size: 22px;
+            font-weight: 100;
+            /* text-align: right;*/
+            padding: 10px 20px 0px 20px;  
+        }
+        .title span {
+            color: #007cae;
+        }
+        .details {
+            padding: 10px 20px 0px 20px;
+            text-align: left !important;
+            /*margin-left: 40%;*/
+        }
+        .hrItem {
+            border: none;
+            height: 1px;
+            /* Set the hr color */
+            color: #333; /* old IE */
+            background-color: #fff; /* Modern Browsers */
+        }
+        .table{
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        .table th{
+            background-color: lightgray;
+            color: black;
+            font-weight: bold;
+        }
+        .table td{
+            padding-bottom: 5px;
+        }
+        .brand-image{
+            opacity: .8;
+            width: 360px;
+            height: 124px;
+            margin-bottom: 45px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <img src="https://www.pucmm.edu.do/recursos/PublishingImages/logosimbolo/Marca%20PUCMM%20%28Color%29.png" alt="Pucmm Logo" class="brand-image">
+    <div class='wrapper'>
+        <div class='header'>
+            <p class='title'>Evaluacion #{{ order_id }} </p>
+        </div>
+    </div>
+    
+    <table class="table">
+        <thead class="border-bottom font-weight-bold">
+            <tr>
+                <td>Rúbrica</td>
+                <td>Proyecto y Programación</td>
+                <td>Ponderación</td>
+                <td>Observaciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eval in listar_eval %}
+                <tr>
+                    {% if eval.eliminado == False %}
+                        <td>{{eval.rubrica}}</td>
+                        <td>{{eval.programacion}}</td>
+                        <td>{{eval.ponderacion}}</td>
+                        <td>{{eval.observaciones}}</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- <div>
+        <div class='details'>
+            Bill to: {{ customer_name }}<br/>
+            Amount: {{ amount }} <br/>
+            Date: {{ today }}
+            <hr class='hrItem' />
+        </div>
+    </div> -->
+</body>
+</html>

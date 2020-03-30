@@ -1,0 +1,100 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1 class="display-4">Dashboard</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<h2>Información general</h2>
+<!-- first row -->
+<div class="row">
+    <div class="col-md-3">
+        <a href="{% url 'proyecto_list' %}">
+        <div class="info-box mb-3 bg-warning">
+            <span class="info-box-icon"><i class="fas fa-project-diagram"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Proyectos</h3></span>
+                <span class="info-box-number"><h3>{{ p }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'rubrica_list' %}">
+        <div class="info-box mb-3 bg-success">
+            <span class="info-box-icon"><i class="fas fa-clipboard"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Rúbricas</h3></span>
+                <span class="info-box-number"><h3>{{ r }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'item_list' %}">
+        <div class="info-box mb-3 bg-indigo">
+            <span class="info-box-icon"><i class="fab fa-bitbucket"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Ítems</h3></span>
+                <span class="info-box-number"><h3>{{ i }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'estudiante_list' %}">
+        <div class="info-box mb-3 bg-pink">
+            <span class="info-box-icon"><i class="fas fa-user-graduate"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Estudiantes</h3></span>
+                <span class="info-box-number"><h3>{{ e }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <a href="{% url 'prog_list' %}">
+        <div class="info-box mb-3 bg-gray">
+            <span class="info-box-icon"><i class="fas fa-tasks"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Programaciones</h3></span>
+                <span class="info-box-number"><h3>{{ pr }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'clasif_list' %}">
+        <div class="info-box mb-3 bg-gradient-cyan">
+            <span class="info-box-icon"><i class="fas fa-code-branch"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Clasificaciones</h3></span>
+                <span class="info-box-number"><h3>{{ c }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'usuario_list' %}">
+        <div class="info-box mb-3 bg-gradient-red">
+            <span class="info-box-icon"><i class="fas fa-user"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Usuarios</h3></span>
+                <span class="info-box-number"><h3>{{ u }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "./base_eval.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1 class="display-4">Dashboard</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<h2>Información general</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <a href="{% url 'eval_disp' %}">
+        <div class="info-box mb-3 bg-cyan">
+            <span class="info-box-icon"><i class="fas fa-clipboard-check"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Evaluaciones disponibles</h3></span>
+                <span class="info-box-number"><h3>{{ prog }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+    <div class="col-md-4">
+        <a href="{% url 'eval_list' %}">
+        <div class="info-box mb-3 bg-green">
+            <span class="info-box-icon"><i class="fas fa-clipboard-list"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Evaluaciones realizadas</h3></span>
+                <span class="info-box-number"><h3>{{ eval }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+</div>
+
+{% endblock %}

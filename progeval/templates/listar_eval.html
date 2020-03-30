@@ -1,0 +1,49 @@
+{% extends "./base_eval.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1 class="display-4">Evaluaciones realizadas</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Rúbrica</td>
+            <td>Proyecto y Programación</td>
+            <td>Ponderación</td>
+            <td>Observaciones</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for eval in listar_eval %}
+            <tr>
+                {% if eval.eliminado == False %}
+                    <td>{{eval.rubrica}}</td>
+                    <td>{{eval.programacion}}</td>
+                    <td>{{eval.ponderacion}}</td>
+                    <td>{{eval.observaciones}}</td>
+                    <td>
+                        <a href="#" class="btn btn-outline-info"><i class="fas fa-clipboard-check"></i>
+                            Ver ficha
+                        </a>
+                        <a href="{% url 'pdf_view' %}" class="btn btn-outline-danger"><i class="far fa-file-pdf"></i>
+                            Exportar PDF
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

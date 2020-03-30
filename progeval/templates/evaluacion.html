@@ -1,0 +1,45 @@
+{% extends './base_eval.html' %}
+{% block content %}
+    <div class="main-block">
+      <form action="" method="POST" autocomplete="off">
+        {% csrf_token %}
+        <h1>Ficha de Evaluación</h1>
+        <hr>
+        {% for grupo in evaluacion %}
+        <div>
+          <h4>{{grupo.nombre}} ({{grupo.peso}} puntos)</h4>
+          <table id="teibol">
+            <tr>
+              <th class="first-col"></th>
+              <th>1</th>
+              <th>2</th>
+              <th>3</th>
+              <th>4</th>
+              <th>5</th>
+            </tr>
+            {% for item in grupo.items.all %}
+            <tr>
+                <td class="first-col">{{item.titulo}}</td>
+                <td><input type="radio" value="1" name="rad_{{item.id}}" required/></td>
+                <td><input type="radio" value="2" name="rad_{{item.id}}" required/></td>
+                <td><input type="radio" value="3" name="rad_{{item.id}}" required/></td>
+                <td><input type="radio" value="4" name="rad_{{item.id}}" required/></td>
+                <td><input type="radio" value="5" name="rad_{{item.id}}" required/></td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <hr>
+        {% endfor %}
+        <div class="comments-block">
+          <h4 class="comments">Observaciones<small>Agregue aqui cualquier comentario u opinion sobre la presentacion</small></h4>
+          <div class="answer">
+            <textarea rows="5" name="observaciones"></textarea>
+          </div>
+        </div>
+        <div class="btn-block">
+          <button type="submit">Enviar</button>
+        </div>
+      </form>
+    </div>
+{% endblock content %}

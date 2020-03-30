@@ -1,0 +1,54 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1 class="display-4">Listado de estudiantes</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Nombre</td>
+            <td>Apellido</td>
+            <td>Fecha de Nacimiento</td>
+            <td>Matrícula</td>
+            <td>
+                <a href="{% url 'coord_estudiante' %}" class="btn btn-outline-success">
+                    Agregar nuevo estudiante
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for estud in listar_estudiante %}
+            <tr>
+                {% if estud.eliminado == False %}
+                    <td>{{estud.nombre}}</td>
+                    <td>{{estud.apellido}}</td>
+                    <td>{{estud.fechaNacimiento}}</td>
+                    <td>{{estud.matricula}}</td>
+                    <td>
+                        <a href="{% url 'estudiante_update' estud.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
+                            Editar
+                        </a>
+                        <a href="{% url 'estudiante_delete' estud.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
+                            Eliminar
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

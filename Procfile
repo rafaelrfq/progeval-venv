@@ -1,0 +1,1 @@
+web: gunicorn progeval_ing.wsgi --log-file -

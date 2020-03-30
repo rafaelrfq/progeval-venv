@@ -1,0 +1,71 @@
+{% extends './base_prog.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="display-4">Insertar nueva rúbrica</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<form action="" method="post" autocomplete="off">
+    {{ formset.non_form_errors }}
+    {{ form.errors }}
+    {{ formset.errors }}
+    {{ formset.non_field_errors }}
+    {% csrf_token %}
+    <h3>Rúbrica</h3>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form.nombre|as_crispy_field }}
+        </div>
+        <div class="col-md-6">
+            {{ form.fechaCreacion|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.activa|as_crispy_field }}
+        </div>
+    </div>
+    <hr>
+    <h3>Grupos de ítems</h3>
+    {{ form1.management_form }}
+    {% for field in form1 %}
+        {% for hidden in field.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+    <div class="row">
+        <div class="col-md-4">
+            {{ field.nombre|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ field.peso|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ field.items|as_crispy_field }}
+        </div>
+    </div>
+    {% endfor %}
+
+    <div class="row">
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Registrar
+            </button>
+        </div>
+        <div class="col-md-8">
+            <a href="{% url 'rubrica_list' %}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-list"></i>
+                Ir a listado de rúbricas
+            </a>
+        </div>
+    </div>
+    
+</form>
+{% endblock content %}

@@ -1,0 +1,66 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<h1 class="display-4">Listado de proyectos</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Nombre</td>
+            <td>Clasificación</td>
+            <td>Asesor</td>
+            <td>Equipo</td>
+            <td>
+                <a href="{% url 'coord_proyecto' %}" class="btn btn-outline-success">
+                    Agregar nuevo proyecto
+                </a>
+            </td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for proyecto in listar_proyecto %}
+            <tr>
+                {% if proyecto.eliminado == False %}
+                    <td>{{proyecto.nombre}}</td>
+                    <td>
+                        <ul style="list-style-type:none;">
+                        {% for clasif in proyecto.clasificacion.all %}
+                            <li>{{ clasif }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{proyecto.asesor}}</td>
+                    <td>
+                        <ul>
+                        {% for integrante in proyecto.equipo.all %}
+                            <li>{{ integrante }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="{% url 'proyecto_update' proyecto.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
+                            Editar
+                        </a>
+                        <a href="{% url 'proyecto_delete' proyecto.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
+                            Eliminar
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

@@ -1,0 +1,71 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html>
+    
+<head>
+	<title>Login</title>
+	<!-- Theme style -->
+	<link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/adminlte.min.css' %}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+<body class="hold-transition login-page">
+	<!-- <img src="{% static 'loginlogo.png' %}" alt="Login Logo" class="brand-image img-circle elevation-3" style="opacity: .8;width: 128px;height: 128px;margin-bottom: 5px;"> -->
+	<img src="{% static 'pucmmLogo.png' %}" alt="Pucmm Logo" class="brand-image" style="opacity: .8;width: 592px;height: 192px;margin-bottom: 45px;">
+	<div class="login-box">
+	  <div class="card">
+		<div class="card-body login-card-body">
+		  <p class="login-box-msg">Inicio de sesión</p>
+			<form method="POST" action="" autocomplete="off">
+			{% csrf_token %}
+			<div class="input-group mb-3">
+				<input type="text" name="username" class="form-control" placeholder="Nombre de Usuario">
+				<div class="input-group-append">
+					<div class="input-group-text">
+					<span class="fas fa-user"></span>
+					</div>
+				</div>
+			</div>
+			<div class="input-group mb-3">
+				<input type="password" name="password" class="form-control" placeholder="Contraseña">
+				<div class="input-group-append">
+					<div class="input-group-text">
+					<span class="fas fa-lock"></span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<!-- /.col -->
+				<div class="col-12">
+					<button type="submit" class="btn btn-primary btn-block">Iniciar sesión</button>
+				</div>
+				<!-- /.col -->
+			</div>
+			<p>
+			{% if messages %}
+				<ul class="messages">
+				{% for message in messages %}
+					<li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+				{% endfor %}
+				</ul>
+			{% endif %}
+			</p>
+			</form>
+	   </div>
+	  </div>
+	 </div>
+	</div>
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{% static 'scripts/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'scripts/adminlte.min.js' %}"></script>
+
+</body>
+
+</html>

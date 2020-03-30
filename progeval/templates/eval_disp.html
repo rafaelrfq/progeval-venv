@@ -1,0 +1,54 @@
+{% extends './base_eval.html' %}
+{% block content %}
+
+<h1 class="display-4">Evaluaciones disponibles</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>Fecha</td>
+            <td>Estado</td>
+            <td>Rúbrica</td>
+            <td>Presidente de Jurado</td>
+            <td>Jurado</td>
+            <td>Proyecto</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for prog in listar_prog %}
+            <tr>
+                {% if prog.eliminado == False %}
+                    <td>{{prog.fecha}}</td>
+                    <td>{{prog.estado}}</td>
+                    <td>{{prog.rubrica}}</td>
+                    <td>{{prog.presidenteJurado}}</td>
+                    <td>
+                        <ul>
+                        {% for integrante in prog.jurado.all %}
+                            <li>{{ integrante }}</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{prog.proyecto}}</td>
+                    <td>
+                        <a href="{% url 'evaluacion' prog.id %}" class="btn btn-outline-success"><i class="fas fa-clipboard-check"></i>
+                            Evaluar
+                        </a>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

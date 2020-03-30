@@ -1,0 +1,46 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="display-4">Registrar Usuario</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<form action="{% url 'user_insert' %}" method="post" autocomplete="off">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4">
+            <label>Nombre de Usuario</label>
+            <input type="text" name="username" class="form-control" placeholder="Nombre de Usuario">
+            <!-- {{ form.username|as_crispy_field }} -->
+        </div>
+        <div class="col-md-4">
+            <label>Contraseña</label>
+            <input type="password" name="password1" class="form-control" placeholder="Contraseña">
+            <!-- {{ form.password1|as_crispy_field }} -->
+        </div>
+        <div class="col-md-4">
+            <label>Confirmar Contraseña</label>
+            <input type="password" name="password2" class="form-control" placeholder="Contraseña">
+            <!-- {{ form.password2|as_crispy_field }} -->
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-arrow-circle-right"></i>
+                Siguiente
+            </button>
+        </div>
+    </div>
+    
+</form>
+{% endblock content %}

@@ -1,0 +1,58 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h1 class="display-4">Registrar Usuario</h1>
+<p class="lead font-italic">Proyecto de Ing. Software</p>
+<hr class="my-4">
+<p>
+    {% if messages %}
+        <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</p>
+<!-- <p>
+    {{ formset.errors }}
+    {{ formset.non_form_errors }}
+    {{ form.errors }}
+    {{ formset.non_field_errors }}
+</p> -->
+<form action="" method="post" autocomplete="off">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.nombre|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.apellido|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.fechaNacimiento|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            {{ form.rol|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.user|as_crispy_field }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
+                Registrar
+            </button>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'usuario_list' %}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-list"></i>
+                Ir a lista de Usuarios
+            </a>
+        </div>
+    </div>
+    
+</form>
+{% endblock content %}

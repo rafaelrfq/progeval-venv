@@ -2,23 +2,32 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario
+import datetime
 
 
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+class TimeInput(forms.TimeInput):
+    input_type = 'time'
+
 class ProgForm(forms.ModelForm):
 
     class Meta:
         model = Programacion
-        fields = ('fecha','estado','rubrica', 'presidenteJurado', 'jurado', 'proyecto')
+        fields = ('fecha', 'hora', 'estado', 'rubrica', 'presidenteJurado', 'jurado', 'proyecto')
         labels = {
-            'fecha': "Fecha y Hora",
+            'fecha': "Fecha",
+            'hora': "Hora",
             'estado': "Estado",
             'rubrica': "Rúbrica",
             'jurado': "Jurado",
             'proyecto': "Proyecto",
             'presidenteJurado': "Presidente de Jurado"
+        }
+        widgets = {
+            'fecha': DateInput(),
+            'hora': TimeInput()
         }
 
     def __init__(self, *args, **kwargs):
@@ -38,12 +47,6 @@ class ProgForm(forms.ModelForm):
             raise forms.ValidationError('Máximo dos personas por jurado, excluyendo al presidente.')
 
         return self.cleaned_data
-
-    # def clean_regions(self):
-    #     regions = self.cleaned_data['regions']
-    #     if len(regions) > 3:
-    #         raise forms.ValidationError('You can add maximum 3 regions')
-    #     return regions
 
 class EstudianteForm(forms.ModelForm):
 

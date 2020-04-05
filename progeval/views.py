@@ -38,10 +38,9 @@ def coord_home(request):
 
 def programacion(request, id=0):
     rub = Rubrica.objects.get(activa=True)
-    # estado = Estado.objects.get(nombre='Programada')
     if request.method == "GET":
         if id==0:
-            form = ProgForm(initial={'rubrica': rub.id, 'estado': 'Programada', 'fecha': datetime.now()})
+            form = ProgForm(initial={'rubrica': rub.id, 'estado': 'Programada'})
         else:
             programacion = Programacion.objects.get(pk=id)
             form = ProgForm(instance=programacion)
@@ -57,7 +56,7 @@ def programacion(request, id=0):
             messages.success(request, 'Programación insertada.')
             return redirect('/coord/programacion/listar')
     else:
-        form = ProgForm(initial={'rubrica': rub.id, 'estado': 'Programada', 'fecha': datetime.now()})
+        form = ProgForm(initial={'rubrica': rub.id, 'estado': 'Programada'})
     return render(request, 'programacion.html', {'form': form})
 
 def delete_prog(request, id):
@@ -160,7 +159,7 @@ def listar_item(request):
     return render(request, "listar_item.html", context)
 
 def insertar_rubrica(request, id=0):
-    GrupoFormSet = inlineformset_factory(Rubrica, Grupo, fields=('nombre', 'peso', 'items'), extra=3, can_delete=False, max_num=5)
+    GrupoFormSet = inlineformset_factory(Rubrica, Grupo, fields=('nombre', 'peso', 'items'), extra=15, can_delete=False, max_num=15)
     if request.method == "GET":
         if id==0:
             form = RubricaForm()
@@ -187,7 +186,6 @@ def insertar_rubrica(request, id=0):
                         suma += grupos.peso
                     if suma == 100:
                         form1.save()
-                        
                         messages.success(request, 'Rúbrica insertada.')
                         return redirect('/coord/rubrica/listar') 
                     else:
@@ -307,6 +305,7 @@ def evaluacion(request, id):
                 ponderacion += int(evaluacion[key])
         e = Evaluacion.create(rub, prog, ponderacion, observ)
         e.save()
+        return redirect('/jurado/evaluacion/listar')
     
     return render(request, 'evaluacion.html', context)
 
@@ -317,7 +316,10 @@ def listar_evaluacion(request):
 
 class GeneratePdf(View):
     def get(self, request, *args, **kwargs):
-        evaluaciones = Evaluacion.objects.all()
-        context = {'listar_eval': evaluaciones}
+        id = self.kwargs['id']
+        evaluaciones = Evaluacion.objects.get(pk=id)
+        programacion = Programacion.objects.get(pk=evaluaciones.programacion.id)
+        proyecto = Proyecto.objects.get(pk=programacion.proyecto.id)
+        context = {'eval': evaluaciones, 'prog': programacion, 'proyecto': proyecto}
         pdf = render_to_pdf('pdf_template.html', context)
         return HttpResponse(pdf, content_type='application/pdf')

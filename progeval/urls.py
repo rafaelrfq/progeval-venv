@@ -42,6 +42,6 @@ urlpatterns = [
     path('jurado/evaluacion/<int:id>/', views.evaluacion, name='evaluacion'), #evaluation
     path('jurado/evaluacion/listar', views.listar_evaluacion, name='eval_list'), #evaluation
     #path de PDF
-    path('jurado/evaluacion/listar/pdf', views.GeneratePdf.as_view(), name='pdf_view'), #pdf ficha evaluacion
+    path('jurado/evaluacion/listar/pdf/<int:id>/', views.GeneratePdf.as_view(), name='pdf_view'), #pdf ficha evaluacion
 
 ]

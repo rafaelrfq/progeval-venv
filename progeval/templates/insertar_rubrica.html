@@ -2,6 +2,32 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<script>
+    function show() {
+        var x = document.getElementsByName("grupos");
+        var i, a, b, c;
+        for (i = 0; i < x.length; i++) {
+            if(x[i].style.display == 'none'){
+                a = x[i];
+                b = x[i+1];
+                c = x[i+2];
+                break;
+            }
+        }
+        a.style.display = 'block';
+        b.style.display = 'block';
+        c.style.display = 'block';
+    }
+    function hide() {
+        var x = document.getElementsByName("grupos");
+        var i;
+        for (i = 0; i < x.length; i++) {
+            x[i].style.display = 'none';
+        }
+    }
+    window.onload = hide;
+</script>
+
 <h1 class="display-4">Insertar nueva rúbrica</h1>
 <p class="lead font-italic">Proyecto de Ing. Software</p>
 <hr class="my-4">
@@ -35,20 +61,29 @@
         </div>
     </div>
     <hr>
-    <h3>Grupos de ítems</h3>
+    <div class="row">
+        <div class="col-md-2">
+            <h3 id="grupos">Grupos de ítems</h3>
+        </div>
+        <div class="col-md-2">
+            <button type="button" onclick="show()" class="btn btn-primary btn-block" style="margin-left: 10px;"><i class="fas fa-plus"></i>
+                Agregar
+            </button>
+        </div>
+    </div>
     {{ form1.management_form }}
     {% for field in form1 %}
         {% for hidden in field.hidden_fields %}
             {{ hidden }}
         {% endfor %}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-4" name="grupos">
             {{ field.nombre|as_crispy_field }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" name="grupos">
             {{ field.peso|as_crispy_field }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" name="grupos">
             {{ field.items|as_crispy_field }}
         </div>
     </div>

@@ -18,6 +18,7 @@
     <thead class="border-bottom font-weight-bold">
         <tr>
             <td>Fecha</td>
+            <td>Hora</td>
             <td>Estado</td>
             <td>Rúbrica</td>
             <td>Presidente de Jurado</td>
@@ -30,6 +31,7 @@
             <tr>
                 {% if prog.eliminado == False %}
                     <td>{{prog.fecha}}</td>
+                    <td>{{prog.hora}}</td>
                     <td>{{prog.estado}}</td>
                     <td>{{prog.rubrica}}</td>
                     <td>{{prog.presidenteJurado}}</td>

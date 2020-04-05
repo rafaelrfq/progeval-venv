@@ -2,6 +2,34 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<script>
+    function hoy() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth()+1;
+        var yyyy = today.getFullYear();
+        var hh = today.getHours();
+        var minutes = today.getMinutes();
+        if(dd<10){
+                dd='0'+dd
+            } 
+        if(mm<10){
+            mm='0'+mm
+        } 
+        if(hh<10){
+            hh='0'+hh
+        }
+        if(minutes<10){
+            minutes='0'+minutes
+        }
+
+        today = yyyy+'-'+mm+'-'+dd+'T'+hh+':'+minutes;
+        document.getElementById("fecha").setAttribute("min", today);
+        document.getElementById("fecha").setAttribute("value", today);
+    }
+    window.onload = hoy;
+</script>
+
 <h1 class="display-4">Programación de presentación de proyectos</h1>
 <p class="lead font-italic">Proyecto de Ing. Software</p>
 <hr class="my-4">
@@ -21,8 +49,11 @@
     {{ form.non_field_errors }}
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
             {{ form.fecha|as_crispy_field }}
+        </div>
+        <div class="col-md-1">
+            {{ form.hora|as_crispy_field }}
         </div>
         <div class="col-md-4">
             {{ form.estado|as_crispy_field }}

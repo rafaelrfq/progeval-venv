@@ -1,6 +1,7 @@
 from django.db import models
 from registrar_usuario.models import Usuario, Persona
 import datetime
+from django.utils import timezone
 
 ESTADO = [
     ('', '--Seleccione--'),
@@ -70,20 +71,21 @@ class Estado(models.Model):
         return self.nombre
 
 class Programacion(models.Model):
-    fecha = models.DateTimeField()
+    fecha = models.DateField(default=datetime.date.today)
+    hora = models.TimeField(default=timezone.now)
     estado = models.CharField(max_length=100, choices=ESTADO)
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
-    presidenteJurado = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='presidente')
+    presidenteJurado = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='presidente')
     jurado = models.ManyToManyField(Usuario)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
     eliminado = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.proyecto.nombre + ' - Fecha: {0} Hora: {1}'.format(self.fecha.date(), self.fecha.time())
+        return self.proyecto.nombre + ' - Fecha: {0} Hora: {1}'.format(self.fecha, self.hora)
 
 class Evaluacion(models.Model):
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
-    programacion = models.OneToOneField(Programacion, on_delete=models.CASCADE)
+    programacion = models.ForeignKey(Programacion, on_delete=models.CASCADE)
     ponderacion = models.PositiveIntegerField()
     observaciones = models.TextField(max_length=1000)
     eliminado = models.BooleanField(default=False)

@@ -8,6 +8,12 @@
             font-weight: 200;
             font-size: 14px;
         }
+        .titulo {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
         .header {
             font-size: 20px;
             font-weight: 100;
@@ -36,16 +42,57 @@
             background-color: #fff; /* Modern Browsers */
         }
         .table{
-            border: 1px solid black;
             border-collapse: collapse;
+            border: 1px solid black;
+            font-size: 3;
         }
         .table th{
-            background-color: lightgray;
-            color: black;
-            font-weight: bold;
+            padding-top: 4px;
+            padding-bottom: 0px;
+            text-align: left;
+            background-color: black;
+            color: white;
+            padding-left: 2px;
         }
         .table td{
-            padding-bottom: 5px;
+            padding-top: 4px;
+            padding-bottom: 0px;
+            padding-left: 2px;
+        }
+        .table2{
+            border-collapse: collapse;
+            border: 1px solid black;
+            font-size: 3;
+        }
+        .table2 th{
+            padding-top: 4px;
+            padding-bottom: 0px;
+            text-align: center;
+            background-color: black;
+            color: white;
+        }
+        .table2 td{
+            padding-top: 4px;
+            padding-bottom: 0px;
+            margin-left: 5px;
+        }
+        .table3{
+            border-collapse: collapse;
+            font-size: 4;
+        }
+        .table3 th{
+            padding-top: 4px;
+            padding-bottom: 0px;
+            background-color: black;
+            color: white;
+            padding-right: 2px;
+            text-align: right;
+            border: 1px solid black;
+        }
+        .table3 td{
+            padding-top: 4px;
+            padding-bottom: 0px;
+            text-align: center;
         }
         .brand-image{
             opacity: .8;
@@ -54,46 +101,98 @@
             margin-bottom: 45px;
             text-align: center;
         }
+        .parrafo{
+            font-size: 4;
+            font-weight: bold;
+            text-align: center;
+        }
+        .parrafo2{
+            font-size: 4;
+            margin-left: 1cm;
+        }
     </style>
 </head>
 <body>
-    <img src="https://www.pucmm.edu.do/recursos/PublishingImages/logosimbolo/Marca%20PUCMM%20%28Color%29.png" alt="Pucmm Logo" class="brand-image">
-    <div class='wrapper'>
-        <div class='header'>
-            <p class='title'>Evaluacion #{{ order_id }} </p>
-        </div>
-    </div>
-    
-    <table class="table">
-        <thead class="border-bottom font-weight-bold">
+    <br>
+    <h1 class="titulo">PONTIFICIA UNIVERSIDAD CATÓLICA MADRE Y MAESTRA</h1>
+    <h2 class="titulo">FACULTAD DE CIENCIAS E INGENIERÍA</h2>
+    <h3 class="titulo">Escuela de Ingeniería en Computación y Telecomunicaciones</h3>
+    <br>
+    <p class="parrafo">Proyecto de Fin de Carrera<br>Acta de Evaluación</p>
+
+    <p class="parrafo2">Sustentante(s):</p>
+    <table class="table" align="center">
+        <tr>
+            <th style="width: 60%;">Nombre</th>
+            <th style="width: 30%;">Matrícula</th>
+        </tr>
+        {% for integrante in proyecto.equipo.all %}
             <tr>
-                <td>Rúbrica</td>
-                <td>Proyecto y Programación</td>
-                <td>Ponderación</td>
-                <td>Observaciones</td>
+                <td>{{ integrante }}</td>
+                <td>{{ integrante.matricula }}</td>
             </tr>
-        </thead>
-        <tbody>
-            {% for eval in listar_eval %}
-                <tr>
-                    {% if eval.eliminado == False %}
-                        <td>{{eval.rubrica}}</td>
-                        <td>{{eval.programacion}}</td>
-                        <td>{{eval.ponderacion}}</td>
-                        <td>{{eval.observaciones}}</td>
-                    {% endif %}
-                </tr>
-            {% endfor %}
-        </tbody>
+        {% endfor %}
     </table>
-    
-    <!-- <div>
-        <div class='details'>
-            Bill to: {{ customer_name }}<br/>
-            Amount: {{ amount }} <br/>
-            Date: {{ today }}
-            <hr class='hrItem' />
-        </div>
-    </div> -->
+
+    <br>
+    <p class="parrafo2">
+        Asesor(a): {{ proyecto.asesor }}<br>
+        Título del PFC: {{ proyecto.nombre }}<br>
+        Fecha de presentación: {{ prog.fecha }}<br>
+        Cómputo de la Evaluación: {{ eval.ponderacion }}/100 <br>
+    </p>
+
+    <table class="table2" align="center">
+        <tr>
+            <th style="color: black; width: 23%;">_</th>
+            <th style="width: 25%;">Nombre</th>
+            <th style="width: 20%;">Calificativo</th>
+            <th style="width: 22%;">Firma</th>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">Presidente del comité evaluador</td>
+            <td>{{ prog.presidenteJurado }}</td>
+            <td> </td>
+            <td> </td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">2do Jurado</td>
+            {% for juez in prog.jurado.all %}
+                {% if forloop.first %}
+            <td>{{ juez }}</td>
+            <td> </td>
+            <td> </td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        <tr>
+            <td style="font-weight: bold;">3er Jurado</td>
+            {% for juez in prog.jurado.all %}
+                {% if forloop.last %}
+            <td>{{ juez }}</td>
+            <td> </td>
+            <td> </td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    </table>
+    <br><br>
+    <table class="table3" align="center">
+        <tr>
+            <td style="color: white; width: 45%;">_</td>
+            <th style="width: 25%;">CALIFICACIÓN<br>FINAL</th>
+            <td style="width: 20%; border: 1px solid black;">{{ eval.calificacion }} ({{ eval.ponderacion }}/100)</td>
+        </tr>
+    </table>
+
+    <br>
+    <p style="text-align: right; padding-right: 1cm; font-size: 3;">
+        FIRMA DEL JURADO: ________________________
+    </p>
+    <br>
+    <p class="parrafo2">
+        Nota: Debe referirse a la rúbrica para evaluación de PFC. Considere los niveles de valoración, y el proceso de cálculo de la calificación.
+    </p>
+
 </body>
 </html>

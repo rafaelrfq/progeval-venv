@@ -1,45 +1,72 @@
 {% extends './base_eval.html' %}
 {% block content %}
-    <div class="main-block">
-      <form action="" method="POST" autocomplete="off">
-        {% csrf_token %}
-        <h1>Ficha de Evaluación</h1>
-        <hr>
-        {% for grupo in evaluacion %}
-        <div>
-          <h4>{{grupo.nombre}} ({{grupo.peso}} puntos)</h4>
-          <table id="teibol">
+<div class="main-block">
+  <form action="" method="POST" autocomplete="off">
+    {% csrf_token %}
+    <br>
+    <p class="titulo" style="font-weight: bold;">PONTIFICIA UNIVERSIDAD CATÓLICA MADRE Y MAESTRA</p>
+    <p class="titulo" style="font-weight: bold;">FACULTAD DE CIENCIAS E INGENIERÍA</p>
+    <p class="titulo">Escuela de Ingeniería en Computación y Telecomunicaciones</p> <br>
+    <p class="titulo" style="font-weight: bold;">Proyecto de Fin de Carrera<br>Formulario de Evaluación</p>
+    
+    <p class="parrafo2">Sustentante(s):</p>
+    <table class="teibol1" align="center">
+        <tr>
+            <th style="width: 60%;">Nombre</th>
+            <th style="width: 30%;">Matrícula</th>
+        </tr>
+        {% for integrante in proyecto.equipo.all %}
             <tr>
-              <th class="first-col"></th>
-              <th>1</th>
-              <th>2</th>
-              <th>3</th>
-              <th>4</th>
-              <th>5</th>
+                <td>{{ integrante }}</td>
+                <td>{{ integrante.matricula }}</td>
             </tr>
-            {% for item in grupo.items.all %}
-            <tr>
-                <td class="first-col">{{item.titulo}}</td>
-                <td><input type="radio" value="1" name="rad_{{item.id}}" required/></td>
-                <td><input type="radio" value="2" name="rad_{{item.id}}" required/></td>
-                <td><input type="radio" value="3" name="rad_{{item.id}}" required/></td>
-                <td><input type="radio" value="4" name="rad_{{item.id}}" required/></td>
-                <td><input type="radio" value="5" name="rad_{{item.id}}" required/></td>
-            </tr>
-            {% endfor %}
-          </table>
-        </div>
-        <hr>
         {% endfor %}
-        <div class="comments-block">
-          <h4 class="comments">Observaciones<small>Agregue aqui cualquier comentario u opinion sobre la presentacion</small></h4>
-          <div class="answer">
-            <textarea rows="5" name="observaciones"></textarea>
-          </div>
-        </div>
-        <div class="btn-block">
-          <button type="submit">Enviar</button>
-        </div>
-      </form>
+    </table>
+
+    <p class="parrafo2">
+      <br>
+      Asesor(a): {{ proyecto.asesor }}<br>
+      Título del PFC: {{ proyecto.nombre }}<br><br>
+      Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
+      Jurado: {{ prog.presidenteJurado }} (Presidente) <br>
+    </p>
+
+    <p style="text-align: center; font-weight: bold; text-decoration: underline;">Ficha de Evaluación:</p>
+
+    {% for grupo in evaluacion %}
+    <div>
+      <table id="teibol">
+        <tr>
+          <th class="first-col">{{grupo.nombre}} ({{grupo.peso}} puntos)</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+          <th>5</th>
+        </tr>
+        {% for item in grupo.items.all %}
+        <tr>
+            <td class="first-col">{{item.titulo}}</td>
+            <td><input type="radio" value="1" name="rad_{{item.id}}" required/></td>
+            <td><input type="radio" value="2" name="rad_{{item.id}}" required/></td>
+            <td><input type="radio" value="3" name="rad_{{item.id}}" required/></td>
+            <td><input type="radio" value="4" name="rad_{{item.id}}" required/></td>
+            <td><input type="radio" value="5" name="rad_{{item.id}}" required/></td>
+        </tr>
+        {% endfor %}
+      </table>
     </div>
+    <hr>
+    {% endfor %}
+    <div class="comments-block">
+      <h4 class="comments">Observaciones<small>Agregue aqui cualquier comentario u opinion sobre la presentacion</small></h4>
+      <div class="answer">
+        <textarea rows="5" name="observaciones"></textarea>
+      </div>
+    </div>
+    <div class="btn-block">
+      <button type="submit">Enviar</button>
+    </div>
+  </form>
+</div>
 {% endblock content %}

@@ -1,2 +1,22 @@
 In 'settings.py' change DEBUG to False.
 
+If the heroku CLI is installed do this:
+
+- Open cmd
+
+- Type 'heroku login'
+You browser will open, just press the login button.
+
+- Type 'heroku git:clone -a progeval'
+	then 'cd progeval'
+Only do this if you haven't cloned the repository beforehand.
+
+- Type 'git push heroku master'
+This will proceed with the build.
+
+
+To migrate the tables to the provided database by heroku do this:
+- Type 'heroku run python manage.py migrate'
+
+You can run any regular python/django command with 'heroku run' such as
+'heroku run python manage.py createsuperuser'

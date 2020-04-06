@@ -139,7 +139,7 @@
     <p class="parrafo2">
         Asesor(a): {{ proyecto.asesor }}<br>
         Título del PFC: {{ proyecto.nombre }}<br>
-        Fecha de presentación: {{ prog.fecha }}<br>
+        Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
         Cómputo de la Evaluación: {{ eval.ponderacion }}/100 <br>
     </p>
 
@@ -194,6 +194,5 @@
     <p class="parrafo2">
         Nota: Debe referirse a la rúbrica para evaluación de PFC. Considere los niveles de valoración, y el proceso de cálculo de la calificación.
     </p>
-
 </body>
 </html>

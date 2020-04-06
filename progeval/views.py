@@ -293,9 +293,10 @@ def evaluaciones_disp(request):
 
 def evaluacion(request, id):
     prog = Programacion.objects.get(pk=id)
+    proyecto = Proyecto.objects.get(pk=prog.proyecto.id)
     rub = prog.rubrica
     grupos = Grupo.objects.filter(rubrica=rub.id)
-    context = {'evaluacion': grupos}
+    context = {'evaluacion': grupos, 'proyecto': proyecto, 'prog': prog}
     if request.method == "POST":
         evaluacion = request.POST
         ponderacion = 0

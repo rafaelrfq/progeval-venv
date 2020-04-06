@@ -1,7 +1,7 @@
 {% extends './base_eval.html' %}
 {% block content %}
 <div class="main-block">
-  <form action="" method="POST" autocomplete="off">
+  <form action="" method="POST" autocomplete="off" id="myForm">
     {% csrf_token %}
     <br>
     <p class="titulo" style="font-weight: bold;">PONTIFICIA UNIVERSIDAD CATÓLICA MADRE Y MAESTRA</p>
@@ -66,7 +66,7 @@
       </div>
     </div>
     <div class="btn-block">
-      <button type="submit">Enviar</button>
+      <button type="submit" id="validar">Enviar</button>
     </div>
   </form>
 </div>
@@ -78,6 +78,21 @@
     total += parseInt($(this).val());
   })
   $("#total").val(total);
+  });
+
+  $(document).ready(function(){
+    $('#validar').click(function(){
+        var check = true;
+        $("input:radio").each(function(){
+            var name = $(this).attr("name");
+            if($("input:radio[name="+name+"]:checked").length == 0){
+                check = false;
+            }
+        });
+        if(!check){
+            alert('Todos los ítems deben ser calificados!');
+        }
+    });
 });
 </script>
 {% endblock content %}

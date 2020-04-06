@@ -47,19 +47,20 @@
         {% for item in grupo.items.all %}
         <tr>
             <td class="first-col">{{item.titulo}}</td>
-            <td><input type="radio" value="1" name="rad_{{item.id}}" required/></td>
-            <td><input type="radio" value="2" name="rad_{{item.id}}" required/></td>
-            <td><input type="radio" value="3" name="rad_{{item.id}}" required/></td>
-            <td><input type="radio" value="4" name="rad_{{item.id}}" required/></td>
-            <td><input type="radio" value="5" name="rad_{{item.id}}" required/></td>
+            <td><input type="radio" value="1" name="rad_{{item.id}}" class="radi" required/></td>
+            <td><input type="radio" value="2" name="rad_{{item.id}}" class="radi" required/></td>
+            <td><input type="radio" value="3" name="rad_{{item.id}}" class="radi" required/></td>
+            <td><input type="radio" value="4" name="rad_{{item.id}}" class="radi" required/></td>
+            <td><input type="radio" value="5" name="rad_{{item.id}}" class="radi" required/></td>
         </tr>
         {% endfor %}
       </table>
     </div>
     <hr>
     {% endfor %}
+    <br>Total: <input type="text" name="total" id="total"/>
     <div class="comments-block">
-      <h4 class="comments">Observaciones<small>Agregue aqui cualquier comentario u opinion sobre la presentacion</small></h4>
+      <h4 class="comments">Observaciones<small>Agregue aquí cualquier comentario u opinión sobre la presentación</small></h4>
       <div class="answer">
         <textarea rows="5" name="observaciones"></textarea>
       </div>
@@ -69,4 +70,14 @@
     </div>
   </form>
 </div>
+
+<script>
+  $(".radi").click(function() {
+  var total = 0;
+  $(".radi:checked").each(function() {
+    total += parseInt($(this).val());
+  })
+  $("#total").val(total);
+});
+</script>
 {% endblock content %}

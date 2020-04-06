@@ -15,19 +15,18 @@
         </ul>
     {% endif %}
 </p>
-<table class="table table-borderless">
+<a href="{% url 'user_insert' %}" class="btn btn-outline-success">
+    Agregar nuevo usuario
+</a><br><br>
+<table class="table table-bordered" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <td>Nombre</td>
-            <td>Apellido</td>
-            <td>Fecha de Nacimiento</td>
-            <td>Nombre de usuario</td>
-            <td>Rol</td>
-            <td>
-                <a href="{% url 'user_insert' %}" class="btn btn-outline-success">
-                    Agregar nuevo usuario
-                </a>
-            </td>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Nombre de usuario</th>
+            <th>Rol</th>
+            <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
@@ -36,7 +35,7 @@
                 {% if usuario.eliminado == False %}
                     <td>{{usuario.nombre}}</td>
                     <td>{{usuario.apellido}}</td>
-                    <td>{{usuario.fechaNacimiento}}</td>
+                    <td>{{usuario.fechaNacimiento|date:"d-m-Y"}}</td>
                     <td>{{usuario.user.username}}</td>
                     {% if usuario.rol == 1 %}
                         <td>Coordinador/a</td>
@@ -44,16 +43,13 @@
                     {% if usuario.rol == 2 %}
                         <td>Juez/a</td>
                     {% endif %}
-                    <td>
+                    <td align="center">
                         <a href="{% url 'usuario_update' usuario.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
                             Editar
+                        </a><hr>
+                        <a href="{% url 'usuario_delete' usuario.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
+                            Eliminar
                         </a>
-                        <form action="{% url 'usuario_delete' usuario.id %}" method="post" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </button>
-                        </form>
                     </td>
                 {% endif %}
             </tr>

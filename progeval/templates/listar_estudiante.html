@@ -15,18 +15,17 @@
         </ul>
     {% endif %}
 </p>
-<table class="table table-borderless">
+<a href="{% url 'coord_estudiante' %}" class="btn btn-outline-success">
+    Agregar nuevo estudiante
+</a><br><br>
+<table class="table table-bordered" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <td>Nombre</td>
-            <td>Apellido</td>
-            <td>Fecha de Nacimiento</td>
-            <td>Matrícula</td>
-            <td>
-                <a href="{% url 'coord_estudiante' %}" class="btn btn-outline-success">
-                    Agregar nuevo estudiante
-                </a>
-            </td>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Fecha de Nacimiento</th>
+            <th>Matrícula</th>
+            <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
@@ -35,12 +34,12 @@
                 {% if estud.eliminado == False %}
                     <td>{{estud.nombre}}</td>
                     <td>{{estud.apellido}}</td>
-                    <td>{{estud.fechaNacimiento}}</td>
+                    <td>{{estud.fechaNacimiento|date:"d-m-Y"}}</td>
                     <td>{{estud.matricula}}</td>
-                    <td>
+                    <td align="center">
                         <a href="{% url 'estudiante_update' estud.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
                             Editar
-                        </a>
+                        </a><hr>
                         <a href="{% url 'estudiante_delete' estud.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
                             Eliminar
                         </a>

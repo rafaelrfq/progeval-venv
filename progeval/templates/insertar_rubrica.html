@@ -2,32 +2,6 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<script>
-    function show() {
-        var x = document.getElementsByName("grupos");
-        var i, a, b, c;
-        for (i = 0; i < x.length; i++) {
-            if(x[i].style.display == 'none'){
-                a = x[i];
-                b = x[i+1];
-                c = x[i+2];
-                break;
-            }
-        }
-        a.style.display = 'block';
-        b.style.display = 'block';
-        c.style.display = 'block';
-    }
-    function hide() {
-        var x = document.getElementsByName("grupos");
-        var i;
-        for (i = 0; i < x.length; i++) {
-            x[i].style.display = 'none';
-        }
-    }
-    window.onload = hide;
-</script>
-
 <h1 class="display-4">Insertar nueva rúbrica</h1>
 <p class="lead font-italic">Proyecto de Ing. Software</p>
 <hr class="my-4">
@@ -103,4 +77,26 @@
     </div>
     
 </form>
+
+<script>    
+    $(document).ready(function(){
+        $('div[name$="grupos"').hide();
+    });
+
+    function show() {
+        var x = document.getElementsByName("grupos");
+        var i, a, b, c;
+        for (i = 0; i < x.length; i++) {
+            if(x[i].style.display == 'none'){
+                a = x[i];
+                b = x[i+1];
+                c = x[i+2];
+                break;
+            }
+        }
+        a.style.display = 'block';
+        b.style.display = 'block';
+        c.style.display = 'block';
+    }
+</script>
 {% endblock content %}

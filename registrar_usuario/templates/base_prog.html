@@ -16,15 +16,22 @@
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/fontawesome.min.js">
   <script src="https://kit.fontawesome.com/84376b9606.js" crossorigin="anonymous"></script>
-</head>
-<body class="hold-transition sidebar-mini">
+  <script src="{% static 'scripts/jquery.min.js' %}"></script>
   <style>
     .usuarionmb{
       font-size: 18px;
       color: black;
       margin-right: 20px;
     }
+    .table-bordered th{
+        font-weight: bold;
+        background-color:lavender;
+        color: black;
+        border: 1px solid darkgray; 
+    }
   </style>
+</head>
+<body class="hold-transition sidebar-mini">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -49,7 +56,7 @@
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="{% url 'coord_home' %}" class="brand-link">
-      <img src="{% static 'images/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <img src="{% static 'images/pucmmRedondo.png' %}" alt="Pucmm Logo" class="brand-image img-circle elevation-3" style="opacity: 1">
       <span class="brand-text font-weight-light">PROGRAMACIÓN</span>
     </a>
 

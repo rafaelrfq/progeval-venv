@@ -15,28 +15,27 @@
         </ul>
     {% endif %}
 </p>
-<table class="table table-borderless">
+<a href="{% url 'coord_prog' %}" class="btn btn-outline-success">
+    Agregar nueva programación
+</a><br><br>
+<table class="table table-bordered" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <td>Fecha</td>
-            <td>Hora</td>
-            <td>Estado</td>
-            <td>Rúbrica</td>
-            <td>Presidente de Jurado</td>
-            <td>Jurado</td>
-            <td>Proyecto</td>
-            <td>
-                <a href="{% url 'coord_prog' %}" class="btn btn-outline-success">
-                    Agregar nueva programación
-                </a>
-            </td>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Rúbrica</th>
+            <th>Presidente de Jurado</th>
+            <th>Jurado</th>
+            <th>Proyecto</th>
+            <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
         {% for prog in listar_prog %}
             <tr>
                 {% if prog.eliminado == False %}
-                    <td>{{prog.fecha}}</td>
+                    <td>{{prog.fecha|date:"d-m-Y"}}</td>
                     <td>{{prog.hora}}</td>
                     <td>{{prog.estado}}</td>
                     <td>{{prog.rubrica}}</td>
@@ -49,10 +48,10 @@
                         </ul>
                     </td>
                     <td>{{prog.proyecto}}</td>
-                    <td>
+                    <td align="center">
                         <a href="{% url 'prog_update' prog.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
                             Editar
-                        </a>
+                        </a><hr>
                         <a href="{% url 'prog_delete' prog.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
                             Eliminar
                         </a>

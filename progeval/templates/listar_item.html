@@ -15,16 +15,15 @@
         </ul>
     {% endif %}
 </p>
-<table class="table table-borderless">
+<a href="{% url 'coord_rubitem' %}" class="btn btn-outline-success">
+    Agregar nuevo ítem
+</a><br><br>
+<table class="table table-bordered" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <td>Título</td>
-            <td>Descripción</td>
-            <td>
-                <a href="{% url 'coord_rubitem' %}" class="btn btn-outline-success">
-                    Agregar nuevo ítem
-                </a>
-            </td>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
@@ -33,10 +32,10 @@
                 {% if item.eliminado == False %}
                     <td>{{item.titulo}}</td>
                     <td>{{item.descripcion}}</td>
-                    <td>
+                    <td align="center">
                         <a href="{% url 'item_update' item.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
                             Editar
-                        </a>
+                        </a><hr>
                         <a href="{% url 'item_delete' item.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
                             Eliminar
                         </a>

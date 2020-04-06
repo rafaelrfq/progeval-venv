@@ -1,6 +1,12 @@
 {% extends './base_eval.html' %}
 {% block content %}
-
+<style>
+    .table-bordered th{
+        font-weight: bold;
+        background-color:lavender;
+        color: black;
+    }
+</style>
 <h1 class="display-4">Evaluaciones disponibles</h1>
 <p class="lead font-italic">Proyecto de Ing. Software</p>
 <hr class="my-4">
@@ -14,23 +20,24 @@
     {% endif %}
 </p>
 
-<table class="table table-borderless">
+<table class="table table-bordered" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <td>Fecha</td>
-            <td>Hora</td>
-            <td>Estado</td>
-            <td>Rúbrica</td>
-            <td>Presidente de Jurado</td>
-            <td>Jurado</td>
-            <td>Proyecto</td>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Estado</th>
+            <th>Rúbrica</th>
+            <th>Presidente de Jurado</th>
+            <th>Jurado</th>
+            <th>Proyecto</th>
+            <th>Opciones</th>
         </tr>
     </thead>
     <tbody>
         {% for prog in listar_prog %}
             <tr>
                 {% if prog.eliminado == False %}
-                    <td>{{prog.fecha}}</td>
+                    <td>{{prog.fecha|date:"d-m-Y"}}</td>
                     <td>{{prog.hora}}</td>
                     <td>{{prog.estado}}</td>
                     <td>{{prog.rubrica}}</td>

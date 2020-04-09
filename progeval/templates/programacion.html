@@ -30,18 +30,7 @@
     window.onload = hoy;
 </script>
 
-<h1 class="display-4">Programación de presentación de proyectos</h1>
-<p class="lead font-italic">Proyecto de Ing. Software</p>
-<hr class="my-4">
-<p>
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</p>
+<br>
 <form action="" method="POST" autocomplete="off">
     {{ formset.errors }}
     {{ form.non_form_errors }}

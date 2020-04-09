@@ -17,7 +17,7 @@
 	<div class="login-box">
 	  <div class="card">
 		<div class="card-body login-card-body">
-		  <p class="login-box-msg">Inicio de sesión</p>
+		  <p class="login-box-msg"><b>Inicio de sesión</b></p>
 			<form method="POST" action="" autocomplete="off">
 			{% csrf_token %}
 			<div class="input-group mb-3">
@@ -43,6 +43,11 @@
 				</div>
 				<!-- /.col -->
 			</div>
+			{% if condicion == None %}
+				<p>
+					<br>Si no tiene cuenta, <a href="{% url 'first_user' %}">regístrese aquí!</a>
+				</p>
+			{% endif %}
 			<p>
 			{% if messages %}
 				<ul class="messages">

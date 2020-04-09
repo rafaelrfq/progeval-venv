@@ -1,0 +1,90 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html>
+    
+<head>
+	<title>Registro</title>
+	<!-- Theme style -->
+	<link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+	<link rel="stylesheet" href="{% static 'css/adminlte.min.css' %}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
+</head>
+<body class="hold-transition login-page">
+	<!-- <img src="{% static 'loginlogo.png' %}" alt="Login Logo" class="brand-image img-circle elevation-3" style="opacity: .8;width: 128px;height: 128px;margin-bottom: 5px;"> -->
+	<img src="{% static 'images/pucmmLogo.png' %}" alt="Pucmm Logo" class="brand-image" style="opacity: .8;width: 592px;height: 192px;margin-bottom: 45px;">
+	<div class="box">
+	  <div class="card">
+		<div class="card-body login-card-body">
+          <p class="login-box-msg"><b>Registro de Usuario</b></p>
+          <p>
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            </p>
+			<form method="POST" action="" autocomplete="off">
+			{% csrf_token %}
+			<div class="row">
+                <div class="col-md-4">
+                    <label>Nombre de Usuario</label>
+                    <input type="text" name="username" class="form-control" placeholder="Nombre de Usuario">
+                </div>
+                <div class="col-md-4">
+                    <label>Contraseña</label>
+                    <input type="password" name="password1" class="form-control" placeholder="Contraseña">
+                </div>
+                <div class="col-md-4">
+                    <label>Confirmar Contraseña</label>
+                    <input type="password" name="password2" class="form-control" placeholder="Contraseña">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" class="form-control" placeholder="Nombre">
+                </div>
+                <div class="col-md-4">
+                    <label>Apellido</label>
+                    <input type="text" name="apellido" class="form-control" placeholder="Apellido">
+                </div>
+                <div class="col-md-4">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" name="fecha" class="form-control">
+                </div>
+            </div><br>
+            <div class="row">
+                <div class="col-md-8">
+                    <label>Rol</label>
+                    <select id="rol" name="rol">
+                        <option value="">--Seleccione--</option>
+                        <option value="1">Coordinador/a</option>
+                        <option value="2">Juez/a</option>
+                      </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-success btn-block btn-lg" style="margin-top: 25px;"><i class="fas fa-database"></i>
+                        Registrar
+                    </button>
+                </div>
+            </div>
+			</form>
+	   </div>
+	  </div>
+	 </div>
+	</div>
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{% static 'scripts/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+
+</body>
+
+</html>

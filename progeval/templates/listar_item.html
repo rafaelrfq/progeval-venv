@@ -3,18 +3,7 @@
 
 {% block content %}
 
-<h1 class="display-4">Listado de ítems</h1>
-<p class="lead font-italic">Proyecto de Ing. Software</p>
-<hr class="my-4">
-<p>
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</p>
+<br>
 <a href="{% url 'coord_rubitem' %}" class="btn btn-outline-success">
     Agregar nuevo ítem
 </a><br><br>
@@ -23,26 +12,32 @@
         <tr>
             <th>Título</th>
             <th>Descripción</th>
-            <th>Opciones</th>
+            <th style="width: 20%;">Opciones</th>
         </tr>
     </thead>
     <tbody>
-        {% for item in listar_item %}
+        {% if listar_item %}
+            {% for item in listar_item %}
+                <tr>
+                    {% if item.eliminado == False %}
+                        <td>{{item.titulo}}</td>
+                        <td>{{item.descripcion}}</td>
+                        <td align="center">
+                            <a href="{% url 'item_update' item.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
+                                Editar
+                            </a> | 
+                            <a href="{% url 'item_delete' item.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
+                                Eliminar
+                            </a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                {% if item.eliminado == False %}
-                    <td>{{item.titulo}}</td>
-                    <td>{{item.descripcion}}</td>
-                    <td align="center">
-                        <a href="{% url 'item_update' item.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                            Editar
-                        </a><hr>
-                        <a href="{% url 'item_delete' item.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                            Eliminar
-                        </a>
-                    </td>
-                {% endif %}
+                <td colspan="3" align="center">No hay datos disponibles.</td>
             </tr>
-        {% endfor %}
+        {% endif %}
     </tbody>
 </table>
 

@@ -2,13 +2,47 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-
-<h1 class="display-4">Dashboard</h1>
-<p class="lead font-italic">Proyecto de Ing. Software</p>
-<hr class="my-4">
+<br>
 <h2>Información general</h2>
 <!-- first row -->
 <div class="row">
+
+    <div class="col-md-3">
+        <a href="{% url 'usuario_list' %}">
+        <div class="info-box mb-3 bg-gradient-red">
+            <span class="info-box-icon"><i class="fas fa-user"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Usuarios</h3></span>
+                <span class="info-box-number"><h3>{{ u }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'estudiante_list' %}">
+        <div class="info-box mb-3 bg-pink">
+            <span class="info-box-icon"><i class="fas fa-user-graduate"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Estudiantes</h3></span>
+                <span class="info-box-number"><h3>{{ e }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'clasif_list' %}">
+        <div class="info-box mb-3 bg-gradient-cyan">
+            <span class="info-box-icon"><i class="fas fa-code-branch"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><h3>Clasificaciones</h3></span>
+                <span class="info-box-number"><h3>{{ c }}</h3></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
     <div class="col-md-3">
         <a href="{% url 'proyecto_list' %}">
         <div class="info-box mb-3 bg-warning">
@@ -20,6 +54,10 @@
         </div>
         </a>
     </div>
+
+</div>
+
+<div class="row">
 
     <div class="col-md-3">
         <a href="{% url 'rubrica_list' %}">
@@ -46,20 +84,6 @@
     </div>
 
     <div class="col-md-3">
-        <a href="{% url 'estudiante_list' %}">
-        <div class="info-box mb-3 bg-pink">
-            <span class="info-box-icon"><i class="fas fa-user-graduate"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text"><h3>Estudiantes</h3></span>
-                <span class="info-box-number"><h3>{{ e }}</h3></span>
-            </div>
-        </div>
-        </a>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-md-3">
         <a href="{% url 'prog_list' %}">
         <div class="info-box mb-3 bg-gray">
             <span class="info-box-icon"><i class="fas fa-tasks"></i></span>
@@ -72,24 +96,12 @@
     </div>
 
     <div class="col-md-3">
-        <a href="{% url 'clasif_list' %}">
-        <div class="info-box mb-3 bg-gradient-cyan">
-            <span class="info-box-icon"><i class="fas fa-code-branch"></i></span>
+        <a href="{% url 'coord_eval_list' %}">
+        <div class="info-box mb-3 bg-purple">
+            <span class="info-box-icon"><i class="fas fa-clipboard-check"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Clasificaciones</h3></span>
-                <span class="info-box-number"><h3>{{ c }}</h3></span>
-            </div>
-        </div>
-        </a>
-    </div>
-
-    <div class="col-md-3">
-        <a href="{% url 'usuario_list' %}">
-        <div class="info-box mb-3 bg-gradient-red">
-            <span class="info-box-icon"><i class="fas fa-user"></i></span>
-            <div class="info-box-content">
-                <span class="info-box-text"><h3>Usuarios</h3></span>
-                <span class="info-box-number"><h3>{{ u }}</h3></span>
+                <span class="info-box-text"><h3>Evaluaciones</h3></span>
+                <span class="info-box-number"><h3>{{ ev }}</h3></span>
             </div>
         </div>
         </a>

@@ -22,6 +22,25 @@ class UsuarioForm(forms.ModelForm):
             # 'password': PasswordInput(),
         }
 
+class FirstUsuarioForm(forms.ModelForm):
+
+    class Meta:
+        model = Usuario
+        fields = ('nombre', 'apellido', 'fechaNacimiento', 'rol', 'user')
+        labels = {
+            'nombre':"Nombre",
+            'apellido':"Apellido",
+            'fechaNacimiento':"Fecha de Nacimiento",
+            'rol': "Rol",
+        }
+        widgets = {
+            'fechaNacimiento': DateInput()
+            # 'password': PasswordInput(),
+        }
+    def __init__(self, *args, **kwargs):
+        super(FirstUsuarioForm, self).__init__(*args, **kwargs)
+        self.fields['user'].required = False
+
     # def __init__(self, *args, **kwargs):
     #     super(UsuarioForm, self).__init__(*args, **kwargs)
     #     self.fields['rol'].empty_label = '--Seleccione--'

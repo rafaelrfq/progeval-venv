@@ -12,6 +12,8 @@ urlpatterns = [
     path('coord/programacion/<int:id>/', views.programacion, name='prog_update'), #edit existing program
     path('coord/programacion/delete/<int:id>/', views.delete_prog, name='prog_delete'), #delete existing
     path('coord/programacion/listar', views.listar_prog, name='prog_list'), #program listing
+    #evaluaciones
+    path('coord/evaluaciones', views.listar_eval_coord, name='coord_eval_list'), #evaluation listing
     #proyecto
     path('coord/proyecto', views.insertar_proyecto, name='coord_proyecto'), #project creation
     path('coord/proyecto/<int:id>/', views.insertar_proyecto, name='proyecto_update'), #edit existing project

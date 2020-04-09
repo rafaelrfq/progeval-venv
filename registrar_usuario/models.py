@@ -32,3 +32,9 @@ class Usuario(Persona):
     def __str__(self):
         nomb = self.nombre + ' ' + self.apellido
         return nomb
+
+    @classmethod
+    def create(cls, nombre, apellido, fechaNacimiento, rol, user):
+        usuario = cls(nombre=nombre, apellido=apellido, fechaNacimiento=fechaNacimiento, rol=rol, user=user)
+        # we could filter data here if necessary
+        return usuario

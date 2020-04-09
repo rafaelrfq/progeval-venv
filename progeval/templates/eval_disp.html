@@ -7,18 +7,7 @@
         color: black;
     }
 </style>
-<h1 class="display-4">Evaluaciones disponibles</h1>
-<p class="lead font-italic">Proyecto de Ing. Software</p>
-<hr class="my-4">
-<p>
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</p>
+<br>
 
 <table class="table table-bordered" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
@@ -34,30 +23,36 @@
         </tr>
     </thead>
     <tbody>
-        {% for prog in listar_prog %}
+        {% if listar_prog %}
+            {% for prog in listar_prog %}
+                <tr>
+                    {% if prog.eliminado == False %}
+                        <td>{{prog.fecha|date:"d-m-Y"}}</td>
+                        <td>{{prog.hora}}</td>
+                        <td>{{prog.estado}}</td>
+                        <td>{{prog.rubrica}}</td>
+                        <td>{{prog.presidenteJurado}}</td>
+                        <td>
+                            <ul>
+                            {% for integrante in prog.jurado.all %}
+                                <li>{{ integrante }}</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{prog.proyecto}}</td>
+                        <td>
+                            <a href="{% url 'evaluacion' prog.id %}" class="btn btn-outline-success"><i class="fas fa-clipboard-check"></i>
+                                Evaluar
+                            </a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                {% if prog.eliminado == False %}
-                    <td>{{prog.fecha|date:"d-m-Y"}}</td>
-                    <td>{{prog.hora}}</td>
-                    <td>{{prog.estado}}</td>
-                    <td>{{prog.rubrica}}</td>
-                    <td>{{prog.presidenteJurado}}</td>
-                    <td>
-                        <ul>
-                        {% for integrante in prog.jurado.all %}
-                            <li>{{ integrante }}</li>
-                        {% endfor %}
-                        </ul>
-                    </td>
-                    <td>{{prog.proyecto}}</td>
-                    <td>
-                        <a href="{% url 'evaluacion' prog.id %}" class="btn btn-outline-success"><i class="fas fa-clipboard-check"></i>
-                            Evaluar
-                        </a>
-                    </td>
-                {% endif %}
+                <td colspan="8" align="center">No hay datos disponibles.</td>
             </tr>
-        {% endfor %}
+        {% endif %}
     </tbody>
 </table>
 {% endblock %}

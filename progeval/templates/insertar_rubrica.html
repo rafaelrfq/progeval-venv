@@ -2,18 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1 class="display-4">Insertar nueva rúbrica</h1>
-<p class="lead font-italic">Proyecto de Ing. Software</p>
-<hr class="my-4">
-<p>
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</p>
+<br>
 <form action="" method="post" autocomplete="off">
     {{ formset.non_form_errors }}
     {{ form.errors }}

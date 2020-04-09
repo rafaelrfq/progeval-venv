@@ -3,18 +3,7 @@
 
 {% block content %}
 
-<h1 class="display-4">Listado de estudiantes</h1>
-<p class="lead font-italic">Proyecto de Ing. Software</p>
-<hr class="my-4">
-<p>
-    {% if messages %}
-        <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-</p>
+<br>
 <a href="{% url 'coord_estudiante' %}" class="btn btn-outline-success">
     Agregar nuevo estudiante
 </a><br><br>
@@ -29,24 +18,30 @@
         </tr>
     </thead>
     <tbody>
-        {% for estud in listar_estudiante %}
+        {% if listar_estudiante %}
+            {% for estud in listar_estudiante %}
+                <tr>
+                    {% if estud.eliminado == False %}
+                        <td>{{estud.nombre}}</td>
+                        <td>{{estud.apellido}}</td>
+                        <td>{{estud.fechaNacimiento|date:"d-m-Y"}}</td>
+                        <td>{{estud.matricula}}</td>
+                        <td align="center">
+                            <a href="{% url 'estudiante_update' estud.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
+                                Editar
+                            </a> | 
+                            <a href="{% url 'estudiante_delete' estud.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
+                                Eliminar
+                            </a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
             <tr>
-                {% if estud.eliminado == False %}
-                    <td>{{estud.nombre}}</td>
-                    <td>{{estud.apellido}}</td>
-                    <td>{{estud.fechaNacimiento|date:"d-m-Y"}}</td>
-                    <td>{{estud.matricula}}</td>
-                    <td align="center">
-                        <a href="{% url 'estudiante_update' estud.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                            Editar
-                        </a><hr>
-                        <a href="{% url 'estudiante_delete' estud.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                            Eliminar
-                        </a>
-                    </td>
-                {% endif %}
+                <td colspan="5" align="center">No hay datos disponibles.</td>
             </tr>
-        {% endfor %}
+        {% endif %}
     </tbody>
 </table>
 

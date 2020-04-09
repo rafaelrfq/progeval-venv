@@ -89,21 +89,10 @@ class Evaluacion(models.Model):
     ponderacion = models.PositiveIntegerField()
     observaciones = models.TextField(max_length=1000)
     eliminado = models.BooleanField(default=False)
+    juez = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, rubrica, programacion, ponderacion, observaciones):
-        eval = cls(rubrica=rubrica, programacion=programacion, ponderacion=ponderacion, observaciones=observaciones)
+    def create(cls, rubrica, programacion, ponderacion, observaciones, juez):
+        eval = cls(rubrica=rubrica, programacion=programacion, ponderacion=ponderacion, observaciones=observaciones, juez=juez)
         # we could filter data here if necessary
         return eval
-
-    def calificacion(self):
-        if 90 <= self.ponderacion <= 100:
-            return 'A'
-        elif 80 <= self.ponderacion < 90:
-            return 'B'
-        elif 70 <= self.ponderacion < 80:
-            return 'C'
-        elif 60 <= self.ponderacion < 70:
-            return 'D'
-        elif self.ponderacion < 60:
-            return 'F'

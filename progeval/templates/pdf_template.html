@@ -75,7 +75,7 @@
         .table2 td{
             padding-top: 4px;
             padding-bottom: 0px;
-            margin-left: 5px;
+            text-align: center;
         }
         .table3{
             border-collapse: collapse;
@@ -140,20 +140,24 @@
         Asesor(a): {{ proyecto.asesor }}<br>
         Título del PFC: {{ proyecto.nombre }}<br>
         Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
-        Cómputo de la Evaluación: {{ eval.ponderacion }}/100 <br>
+        Cómputo de la Evaluación: {{ total }}/100 <br>
     </p>
 
     <table class="table2" align="center">
         <tr>
             <th style="color: black; width: 23%;">_</th>
             <th style="width: 25%;">Nombre</th>
-            <th style="width: 20%;">Calificativo</th>
-            <th style="width: 22%;">Firma</th>
+            <th style="width: 15%;">Calificativo</th>
+            <th style="width: 29%;">Firma</th>
         </tr>
         <tr>
             <td style="font-weight: bold;">Presidente del comité evaluador</td>
             <td>{{ prog.presidenteJurado }}</td>
-            <td> </td>
+            {% for ev in eval %}
+                {% if ev.juez == prog.presidenteJurado %}
+                  <td>{{ ev.ponderacion }} </td>
+                {% endif %}
+            {% endfor %}
             <td> </td>
         </tr>
         <tr>
@@ -161,7 +165,11 @@
             {% for juez in prog.jurado.all %}
                 {% if forloop.first %}
             <td>{{ juez }}</td>
-            <td> </td>
+            {% for ev in eval %}
+                {% if ev.juez == juez %}
+                  <td>{{ ev.ponderacion }} </td>
+                {% endif %}
+            {% endfor %}
             <td> </td>
                 {% endif %}
             {% endfor %}
@@ -171,7 +179,11 @@
             {% for juez in prog.jurado.all %}
                 {% if forloop.last %}
             <td>{{ juez }}</td>
-            <td> </td>
+            {% for ev in eval %}
+                {% if ev.juez == juez %}
+                  <td>{{ ev.ponderacion }} </td>
+                {% endif %}
+            {% endfor %}
             <td> </td>
                 {% endif %}
             {% endfor %}
@@ -182,7 +194,7 @@
         <tr>
             <td style="color: white; width: 45%;">_</td>
             <th style="width: 25%;">CALIFICACIÓN<br>FINAL</th>
-            <td style="width: 20%; border: 1px solid black;">{{ eval.calificacion }} ({{ eval.ponderacion }}/100)</td>
+            <td style="width: 20%; border: 1px solid black;">{{ letra }} ({{ total }}/100)</td>
         </tr>
     </table>
 

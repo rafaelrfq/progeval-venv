@@ -51,6 +51,7 @@ def first_user(request):
                 usuario = Usuario.create(nombre, apellido, fecha, rol, usr)
                 usuario.save()
                 messages.success(request, 'Usuario registrado!')
+                return redirect('/')
         else:
             messages.error(request, 'Los passwords no coinciden.')
     form = UserCreationForm()

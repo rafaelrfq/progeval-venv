@@ -4,6 +4,7 @@ from . import views
 urlpatterns = [
     #home and profile
     path('', include('registrar_usuario.urls')), #include all urls of registrar_usuario app
+    path('ejemplo/', views.ejemplo, name='ejemplo'), #ejemplo
     path('profile/', views.profile, name='profile'), #user profile
     path('coord_home/', views.coord_home, name='coord_home'), #home for coordinators
     path('jurado_home/', views.jurado_home, name='jurado_home'), #home for jury

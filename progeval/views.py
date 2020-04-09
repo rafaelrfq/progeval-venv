@@ -16,6 +16,13 @@ from datetime import datetime
 
 # Views a los que puede accesar el/la coodinador/a
 
+def ejemplo(request):
+    items = Item.objects.all()
+    n = items.count()
+
+    context = {'items': items, 'cantidad': n}
+    return render(request, 'ejemploDualbox.html', context)
+
 @login_required(login_url='/')
 def coord_home(request):
     if userRole(request) == 2:

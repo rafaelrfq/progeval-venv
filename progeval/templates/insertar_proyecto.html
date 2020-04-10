@@ -23,13 +23,20 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             {{ form.asesor|as_crispy_field }}
         </div>
-        <div class="col-md-6">
-            {{ form.equipo|as_crispy_field }}
+        <div class="col-md-8">
+            <label>Equipo de estudiantes</label>
+            {{ form.equipo }}
+            <!-- <select class="duallistbox" multiple="multiple" size="{{ estudiantes.count }}" name="equipo" title="dlbox">
+                {% for est in estudiantes %}
+                  <option value="{{ est.id }}">{{ est }} - {{ est.matricula }}</option>
+                {% endfor %}
+            </select> -->
         </div>
     </div>
+    <br>
     <div class="row">
         <div class="col-md-5">
             <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
@@ -42,6 +49,5 @@
             </a>
         </div>
     </div>
-    
 </form>
 {% endblock content %}

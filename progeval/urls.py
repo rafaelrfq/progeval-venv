@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     #home and profile
     path('', include('registrar_usuario.urls')), #include all urls of registrar_usuario app
-    path('ejemplo/', views.ejemplo, name='ejemplo'), #ejemplo
     path('profile/', views.profile, name='profile'), #user profile
     path('coord_home/', views.coord_home, name='coord_home'), #home for coordinators
     path('jurado_home/', views.jurado_home, name='jurado_home'), #home for jury
@@ -32,7 +31,7 @@ urlpatterns = [
     path('coord/estudiante/listar', views.listar_estudiante, name='estudiante_list'), #student listing
     #rubrica
     path('coord/rubrica', views.insertar_rubrica, name='coord_rub'), #rubrica creation
-    path('coord/rubrica/<int:id>/', views.insertar_rubrica, name='rubrica_update'), #edit existing rubrica
+    path('coord/rubrica/<int:id>/', views.insertar_rubrica, name='rubrica_update'), #edit existing
     path('coord/rubrica/delete/<int:id>/', views.delete_rub, name='rubrica_delete'), #delete existing
     path('coord/rubrica/listar', views.listar_rubrica, name='rubrica_list'), #rubrica listing
     #item

@@ -8,20 +8,14 @@ from django.contrib import messages
 from django.forms import inlineformset_factory
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .forms import ProgForm, EstudianteForm, ProyectoForm, ItemForm, RubricaForm, ClasificacionForm, ProfileForm
+from django.core.exceptions import ObjectDoesNotExist
+from .forms import ProgForm, EstudianteForm, ProyectoForm, ItemForm, RubricaForm, ClasificacionForm, ProfileForm, GrupoForm
 from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Grupo, Item, Estudiante
 from registrar_usuario.views import userRole
 from registrar_usuario.models import Usuario
 from datetime import datetime
 
 # Views a los que puede accesar el/la coodinador/a
-
-def ejemplo(request):
-    items = Item.objects.all()
-    n = items.count()
-
-    context = {'items': items, 'cantidad': n}
-    return render(request, 'ejemploDualbox.html', context)
 
 @login_required(login_url='/')
 def coord_home(request):
@@ -55,10 +49,16 @@ def programacion(request, id=0):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
-        rub = Rubrica.objects.get(activa=True)
+        try:
+            rub = Rubrica.objects.get(activa=True)
+        except ObjectDoesNotExist:
+            rub = None
         if request.method == "GET":
-            if id==0:
+            if id==0 and rub != None:
                 form = ProgForm(initial={'rubrica': rub.id, 'estado': 'Programada'})
+                titulo = 'Programación de presentación de proyectos'
+            elif id==0 and rub == None:
+                form = ProgForm()
                 titulo = 'Programación de presentación de proyectos'
             else:
                 programacion = Programacion.objects.get(pk=id)
@@ -158,6 +158,7 @@ def insertar_proyecto(request, id=0):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
+        # estudiantes = Estudiante.objects.all()
         if request.method == "GET":
             if id==0:
                 form = ProyectoForm()
@@ -206,11 +207,11 @@ def insertar_item(request, id=0):
         if request.method == "GET":
             if id==0:
                 form = ItemForm()
-                titulo = 'Insertar nuevo ítem'
+                titulo = 'Insertar nuevo indicador'
             else:
                 item = Item.objects.get(pk=id)
                 form = ItemForm(instance=item)
-                titulo = 'Editar ítem existente'
+                titulo = 'Editar indicador existente'
             return render(request, "insertar_item.html", {'form':form, 'titulo': titulo})
         else:
             if id==0:
@@ -220,7 +221,7 @@ def insertar_item(request, id=0):
                 form = ItemForm(request.POST, instance=item)
             if form.is_valid():
                 form.save()
-            messages.success(request, 'Ítem insertado.')
+            messages.success(request, 'Indicador insertado.')
             return redirect('/coord/rubrica/item')    
 
 @login_required(login_url='/')
@@ -238,7 +239,7 @@ def listar_item(request):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
-        titulo = 'Listado de Ítems'
+        titulo = 'Listado de Indicadores'
         context = {'listar_item': Item.objects.all(), 'titulo': titulo}
         return render(request, "listar_item.html", context)
 
@@ -247,7 +248,9 @@ def insertar_rubrica(request, id=0):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
-        GrupoFormSet = inlineformset_factory(Rubrica, Grupo, fields=('nombre', 'peso', 'items'), extra=15, can_delete=False, max_num=15)
+        GrupoFormSet = inlineformset_factory(Rubrica, Grupo, form=GrupoForm, fields=('nombre', 'peso', 'items'), extra=15, can_delete=False, max_num=15)
+
+        indicadores = Item.objects.filter(eliminado=False)
         if request.method == "GET":
             if id==0:
                 form = RubricaForm()
@@ -277,29 +280,26 @@ def insertar_rubrica(request, id=0):
                         if suma == 100:
                             form1.save()
                             messages.success(request, 'Rúbrica insertada.')
-                            return redirect('/coord/rubrica') 
+                            return redirect('/coord/rubrica')
                         else:
                             rub.delete()
                             messages.error(request, 'Los grupos deben sumar 100 en su peso/ponderación.')
 
                 else:
-                    return redirect('/coord/rubrica')
-
-            else:
-                rub = Rubrica.objects.get(pk=id)
-                form = RubricaForm(request.POST, instance=rub)
-                form1 = GrupoFormSet(request.POST, instance=rub)
-                if form1.is_valid():
-                    form.save()
-                    form1.save()
-                    messages.success(request, 'Rúbrica actualizada.')
-                    return redirect('/coord/rubrica/listar') 
-                else: 
-                    return redirect('/coord/rubrica')
+                    rub = Rubrica.objects.get(pk=id)
+                    form = RubricaForm(request.POST, instance=rub)
+                    form1 = GrupoFormSet(request.POST, instance=rub)
+                    if form1.is_valid():
+                        form.save()
+                        form1.save()
+                        messages.success(request, 'Rúbrica actualizada.')
+                        return redirect('/coord/rubrica/listar') 
+                    else: 
+                        return redirect('/coord/rubrica')
             
             form = RubricaForm()
             form1 = GrupoFormSet()
-        return render(request, "insertar_rubrica.html", {'form':form, 'form1': form1, 'titulo': titulo})
+        return render(request, "insertar_rubrica.html", {'form':form, 'form1': form1, 'titulo': titulo, 'indicadores': indicadores, 'indice': 0})
 
 @login_required(login_url='/')
 def delete_rub(request, id):
@@ -399,7 +399,11 @@ def jurado_home(request):
     elif userRole(request) == 2:
         titulo = 'Dashboard'
         usuario = Usuario.objects.get(user=request.user)
-        prog = Programacion.objects.filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        try:
+            evaluacion = Evaluacion.objects.get(juez=usuario)
+            prog = Programacion.objects.exclude(pk=evaluacion.programacion.id).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        except ObjectDoesNotExist:
+            prog = Programacion.objects.filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
         evaluaciones = Evaluacion.objects.filter(juez=usuario)
         e = evaluaciones.count()
         p = prog.count()
@@ -411,10 +415,12 @@ def evaluaciones_disp(request):
         return redirect('/coord_home')
     elif userRole(request) == 2:
         user = request.user
-        queryset = Usuario.objects.filter(user=user.id)
-        for item in queryset:
-            usuario = item
-        prog = Programacion.objects.filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        usuario = Usuario.objects.get(user=user.id)
+        try:
+            evaluacion = Evaluacion.objects.get(juez=usuario)
+            prog = Programacion.objects.exclude(pk=evaluacion.programacion.id).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        except ObjectDoesNotExist:
+            prog = Programacion.objects.filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
         titulo = 'Evaluaciones disponibles'
         return render(request, "eval_disp.html", {'listar_prog': prog, 'titulo': titulo})
 

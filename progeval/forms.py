@@ -1,7 +1,7 @@
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
-from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario
+from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario, Grupo
 import datetime
 
 
@@ -12,6 +12,14 @@ class TimeInput(forms.TimeInput):
     input_type = 'time'
 
 class ProgForm(forms.ModelForm):
+
+    jurado = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple(attrs={
+        'class': 'duallistbox',
+        'multiple': 'multiple',
+        'size': '8',
+        'title': 'dlbox',
+        'name': 'items',
+    }), queryset=Usuario.objects.filter(eliminado=False).filter(rol=2))
 
     class Meta:
         model = Programacion
@@ -35,7 +43,7 @@ class ProgForm(forms.ModelForm):
         self.fields['rubrica'].empty_label = '--Seleccione--'
         self.fields['proyecto'].empty_label = '--Seleccione--'
         self.fields['presidenteJurado'].empty_label = '--Seleccione--'
-        self.fields['jurado'].queryset = Usuario.objects.filter(rol=2)
+        self.fields['presidenteJurado'].help_text = 'Escoger un máximo de 3 jueces incluyendo al presidente. (2 como jurado, 1 como presidente.)'
         self.fields['presidenteJurado'].queryset = Usuario.objects.filter(rol=2)
         # to make a filed not required do this:
         # self.fields['evaluacion'].required = False
@@ -65,14 +73,22 @@ class EstudianteForm(forms.ModelForm):
 
 class ProyectoForm(forms.ModelForm):
 
+    equipo = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple(attrs={
+        'class': 'duallistbox',
+        'multiple': 'multiple',
+        'size': '8',
+        'title': 'dlbox',
+        'name': 'items',
+    }), queryset=Estudiante.objects.filter(eliminado=False))
+
     class Meta:
         model = Proyecto
-        fields = ('nombre', 'clasificacion', 'equipo', 'asesor')
+        fields = ('nombre', 'clasificacion', 'asesor', 'equipo')
         labels = {
             'nombre':'Nombre',
             'clasificacion':'Clasificación',
-            'equipo':'Equipo',
-            'asesor':'Asesor'
+            'asesor':'Asesor',
+            'equipo': 'Equipo'
         }
 
     def __init__(self, *args, **kwargs):
@@ -81,7 +97,7 @@ class ProyectoForm(forms.ModelForm):
         self.fields['asesor'].queryset = Usuario.objects.filter(rol=2)
         self.fields['clasificacion'].help_text = 'Puede seleccionar más de una. <br/>Si no aparecen opciones en la lista, agregar una clasificación usando el botón.'
         self.fields['asesor'].help_text = 'Si no aparecen opciones en la lista, agregar un usuario con rol de juez/a.'
-        self.fields['equipo'].help_text = 'Si no aparecen opciones en la lista, agregar nuevos estudiantes.'
+        # self.fields['equipo'].help_text = 'Si no aparecen opciones en la lista, agregar nuevos estudiantes.'
 
 class ItemForm(forms.ModelForm):
 
@@ -116,6 +132,25 @@ class RubricaForm(forms.ModelForm):
     #     if _grupo.peso != 100:
     #         raise ValidationError('La suma de la ponderación de los grupos escogidos debe sumar el 100%')
     #     return self.cleaned_data
+
+class GrupoForm(forms.ModelForm):
+
+    nombre = forms.CharField(max_length=75)
+    peso = forms.IntegerField(min_value=0, max_value=100, help_text='La suma de los pesos debe ser 100 puntos.')
+    items = forms.ModelMultipleChoiceField(widget=forms.SelectMultiple(attrs={
+        'class': 'duallistbox',
+        'multiple': 'multiple',
+        'size': '10',
+        'title': 'dlbox',
+        'name': 'items',
+    }), queryset=Item.objects.filter(eliminado=False))
+    class Meta:
+        model = Grupo
+        fields = ('nombre', 'peso', 'items')
+        labels = {
+            'nombre': 'Nombre',
+            'peso': 'Ponderación',
+        }
 
 class ClasificacionForm(forms.ModelForm):
 

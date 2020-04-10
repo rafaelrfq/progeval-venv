@@ -15,6 +15,12 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/fontawesome.min.js">
+  <!-- Bootstrap -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+  <!-- DuallistBox -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-duallistbox.css' %}">
+  <script src="{% static 'scripts/jquery.bootstrap-duallistbox.js' %}"></script>
+
   <script src="https://kit.fontawesome.com/84376b9606.js" crossorigin="anonymous"></script>
   <script src="{% static 'scripts/jquery.min.js' %}"></script>
   <style>
@@ -216,7 +222,7 @@
               <li class="nav-item">
                 <a href="{% url 'item_list' %}" class="nav-link">
                   <i class="fab fa-bitbucket nav-icon"></i>
-                  <p>Ítems</p>
+                  <p>Indicadores</p>
                 </a>
               </li>
             </ul>
@@ -270,13 +276,14 @@
 <!-- ./wrapper -->
 
 <!-- REQUIRED SCRIPTS -->
-
 <!-- jQuery -->
 <script src="{% static 'scripts/jquery.min.js' %}"></script>
 <!-- Bootstrap 4 -->
 <script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'scripts/adminlte.min.js' %}"></script>
+<!-- DuallistBox -->
+<script src="{% static 'scripts/jquery.bootstrap-duallistbox.js' %}"></script>
 
 <script>
   function message() {
@@ -284,6 +291,7 @@
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
+  $('.duallistbox').bootstrapDualListbox();
   window.onload = message();
 </script>
 </body>

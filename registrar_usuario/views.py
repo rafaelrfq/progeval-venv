@@ -20,7 +20,8 @@ def user_list(request):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
-        context = {'user_list':Usuario.objects.all()}
+        titulo = 'Listado de Usuarios'
+        context = {'user_list':Usuario.objects.all(), 'titulo': titulo}
         return render(request, "user_list.html", context)
 
 def first_user(request):
@@ -63,6 +64,7 @@ def user_register(request):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
+        titulo = 'Insertar Nuevo Usuario'
         if request.method == "POST":
             username = request.POST['username']
             pw1 = request.POST['password1']
@@ -78,7 +80,7 @@ def user_register(request):
             else:
                 messages.error(request, 'Los passwords no coinciden.')
         form = UserCreationForm()
-        return render(request, "user_form2.html", {'form': form})
+        return render(request, "user_form2.html", {'form': form, 'titulo': titulo})
 
 @login_required(login_url='/')
 def usuario_register(request, id=0):
@@ -98,12 +100,14 @@ def usuario_register(request, id=0):
                 return redirect('/usuario/listar')
         else:
             if id==0:
+                titulo = 'Insertar Nuevo Usuario'
                 form = UsuarioForm(initial={'user': user.id})
             else:
+                titulo = 'Editar Usuario Existente'
                 usuario = Usuario.objects.get(pk=id)
                 form = UsuarioForm(instance=usuario)
         
-        return render(request, "user_form.html", {'form': form})
+        return render(request, "user_form.html", {'form': form, 'titulo': titulo})
 
 @login_required(login_url='/')
 def user_delete(request, id):

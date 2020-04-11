@@ -38,20 +38,18 @@
       <table id="teibol">
         <tr>
           <th class="first-col">{{grupo.nombre}} ({{grupo.peso}} puntos)</th>
-          <th>1</th>
-          <th>2</th>
-          <th>3</th>
-          <th>4</th>
-          <th>5</th>
+          {% for i in valores %}
+            <th>{{ i }}</th>
+          {% endfor %}
         </tr>
         {% for item in grupo.items.all %}
         <tr>
-            <td class="first-col">{{item.titulo}}</td>
-            <td><input type="radio" value="1" name="rad_{{item.id}}" class="radi" required/></td>
-            <td><input type="radio" value="2" name="rad_{{item.id}}" class="radi" required/></td>
-            <td><input type="radio" value="3" name="rad_{{item.id}}" class="radi" required/></td>
-            <td><input type="radio" value="4" name="rad_{{item.id}}" class="radi" required/></td>
-            <td><input type="radio" value="5" name="rad_{{item.id}}" class="radi" required/></td>
+            <td >{{item.titulo}}</td>
+            {% for i in valores %}
+              <td style="width: 5px;">
+                <input type="radio" value="{{ i }}" name="rad_{{item.id}}" class="radi" required/>
+              </td>
+            {% endfor %}
         </tr>
         {% endfor %}
       </table>

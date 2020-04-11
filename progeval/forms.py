@@ -113,11 +113,12 @@ class RubricaForm(forms.ModelForm):
 
     class Meta:
         model = Rubrica
-        fields = ('activa', 'fechaCreacion', 'nombre')
+        fields = ('activa', 'fechaCreacion', 'nombre', 'valorIndicador')
         labels = {
             'activa': 'Activa',
             'fechaCreacion': 'Fecha de creación',
-            'nombre': 'Nombre'
+            'nombre': 'Nombre',
+            'valorIndicador': 'Valor para cada indicador'
         }
         widgets = {
             'fechaCreacion' : DateInput()
@@ -126,6 +127,7 @@ class RubricaForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(RubricaForm, self).__init__(*args, **kwargs)
         self.fields['activa'].help_text = 'Seleccione si desea que esta rúbrica se aplique por defecto a las programaciones futuras.'
+        self.fields['valorIndicador'].help_text = 'Este valor se tomará en cuenta a la hora de crear la ficha de evaluación para el jurado.'
 
     # def clean(self):
     #     _grupo = self.cleaned_data.get('grupos')

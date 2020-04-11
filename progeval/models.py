@@ -30,7 +30,7 @@ class Rubrica(models.Model):
     activa = models.BooleanField(default=False)
     fechaCreacion = models.DateField(default=datetime.date.today)
     nombre = models.CharField(max_length=150)
-    # grupos = models.ManyToManyField(Grupo)
+    valorIndicador = models.PositiveIntegerField(default=5)
     eliminado = models.BooleanField(default=False)
 
     def __str__(self):

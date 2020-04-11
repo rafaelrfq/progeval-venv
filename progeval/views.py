@@ -434,7 +434,7 @@ def evaluacion(request, id):
         rub = prog.rubrica
         grupos = Grupo.objects.filter(rubrica=rub.id)
         titulo = 'Ficha de Evaluación'
-        context = {'evaluacion': grupos, 'proyecto': proyecto, 'prog': prog, 'titulo': titulo}
+        context = {'evaluacion': grupos, 'proyecto': proyecto, 'prog': prog, 'titulo': titulo, 'valores': range(1, rub.valorIndicador+1)}
         if request.method == "POST":
             usuario = Usuario.objects.get(user=request.user.id)
             evaluacion = request.POST

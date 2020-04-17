@@ -1,4 +1,4 @@
-{% extends './base_eval.html' %}
+{% extends './base_prog.html' %}
 {% block content %}
 <div class="main-block">
   <form action="" method="POST" autocomplete="off" id="myForm">
@@ -18,7 +18,7 @@
         </tr>
         {% for integrante in proyecto.equipo.all %}
             <tr>
-                <td>{{ integrante }}</td>
+                <td>{{ integrante.nombre }} {{ integrante.apellido }}</td>
                 <td>{{ integrante.matricula }}</td>
             </tr>
         {% endfor %}
@@ -29,12 +29,12 @@
       Asesor(a): {{ proyecto.asesor }}<br>
       Título del PFC: {{ proyecto.nombre }}<br><br>
       Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
-      Jurado: {{ usuario }} <br>
+      Jurado: {{ jurado }} <br>
     </p>
 
     <p style="text-align: center; font-weight: bold; text-decoration: underline;">Ficha de Evaluación:</p>
 
-    {% for grupo in evaluacion %}
+    {% for grupo in grupos %}
     <div>
       <table id="teibol">
         <tr>
@@ -47,9 +47,19 @@
         <tr>
             <td >{{item.titulo}}</td>
             {% for i in valores %}
-              <td style="width: 5px;">
-                <input type="radio" value="{{ i }}" name="{{item.id}}" class="radi" required/>
-              </td>
+                {% for ind in indicadores %}
+                    {% if item.id == ind.indicador.id %}
+                        {% if i == ind.ponderacion %}
+                            <td style="width: 5px;">
+                                <input type="radio" value="{{ i }}" name="{{item.id}}" class="radi" checked disabled/>
+                            </td>
+                        {% else %}
+                            <td style="width: 5px;">
+                                <input type="radio" value="{{ i }}" name="{{item.id}}" class="radi" disabled/>
+                            </td>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
         </tr>
         {% endfor %}
@@ -57,41 +67,13 @@
     </div>
     <hr>
     {% endfor %}
-    <br>Total: <input type="text" name="total" id="total" readonly/>
+    <br>Total: <input type="text" name="total" id="total" value="{{eval.ponderacion}}" disabled/>
     <div class="comments-block">
-      <h4 class="comments">Observaciones<small>Agregue aquí cualquier comentario u opinión sobre la presentación</small></h4>
+      <h4 class="comments">Observaciones<small>Comentarios u opiniones sobre la presentación</small></h4>
       <div class="answer">
-        <textarea rows="5" name="observaciones"></textarea>
+        <textarea rows="5" name="observaciones" disabled>{{eval.observaciones}}</textarea>
       </div>
-    </div>
-    <div class="btn-block">
-      <button type="submit" id="validar">Enviar</button>
     </div>
   </form>
 </div>
-
-<script>
-  $(".radi").click(function() {
-  var total = 0;
-  $(".radi:checked").each(function() {
-    total += parseInt($(this).val());
-  })
-  $("#total").val(total);
-  });
-
-  $(document).ready(function(){
-    $('#validar').click(function(){
-        var check = true;
-        $("input:radio").each(function(){
-            var name = $(this).attr("name");
-            if($("input:radio[name="+name+"]:checked").length == 0){
-                check = false;
-            }
-        });
-        if(!check){
-            alert('Todos los indicadores deben ser calificados!');
-        }
-    });
-});
-</script>
 {% endblock content %}

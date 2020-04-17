@@ -4,23 +4,38 @@
 {% block content %}
 <br>
 <form action="" method="post" autocomplete="off">
+    {{ formset.errors }}
+    {{ form.non_form_errors }}
+    {{ form.errors }}
+    {{ form.non_field_errors }}
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             {{ form.nombre|as_crispy_field }}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             {{ form.apellido|as_crispy_field }}
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            {{ form.fechaNacimiento|as_crispy_field }}
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             {{ form.matricula|as_crispy_field }}
         </div>
-    </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form.email|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.numero_clase|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
+            {{ form.ciclo|as_crispy_field }}
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-6">
+            {{ form.carrera|as_crispy_field }}
+        </div>
+    </div><br>
     <div class="row">
         <div class="col-md-5">
             <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>

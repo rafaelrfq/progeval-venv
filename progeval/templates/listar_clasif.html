@@ -7,7 +7,7 @@
 <a href="{% url 'proyecto_clasif' %}" class="btn btn-outline-success">
     Agregar nueva clasificación
 </a><br><br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Nombre</th>
@@ -21,12 +21,8 @@
                     {% if clasif.eliminado == False %}
                         <td>{{clasif.nombre}}</td>
                         <td align="center">
-                            <a href="{% url 'clasif_update' clasif.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                                Editar
-                            </a> | 
-                            <a href="{% url 'clasif_delete' clasif.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </a>
+                            <a href="{% url 'clasif_update' clasif.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'clasif_delete' clasif.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                         </td>
                     {% endif %}
                 </tr>

@@ -1,9 +1,8 @@
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
-from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario, Grupo
+from .models import Programacion, Estado, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario, Grupo, Carrera
 import datetime
-
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -51,8 +50,15 @@ class ProgForm(forms.ModelForm):
 
     def clean(self):
         jurado = self.cleaned_data.get('jurado')
+        presi = self.cleaned_data.get('presidenteJurado')
+        proye = self.cleaned_data.get('proyecto')
         if len(jurado) > 2:
-            raise forms.ValidationError('Máximo dos personas por jurado, excluyendo al presidente.')
+            raise forms.ValidationError('ERROR: Máximo dos personas por jurado, excluyendo al presidente.')
+        if presi == proye.asesor:
+            raise forms.ValidationError('ERROR: El asesor del proyecto no puede fungir como jurado.')
+        for juez in jurado:
+            if juez == proye.asesor:
+                raise forms.ValidationError('ERROR: El asesor del proyecto no puede fungir como jurado.')
 
         return self.cleaned_data
 
@@ -60,15 +66,40 @@ class EstudianteForm(forms.ModelForm):
 
     class Meta:
         model = Estudiante
-        fields = ('nombre', 'apellido', 'fechaNacimiento', 'matricula')
+        fields = ('nombre', 'apellido', 'matricula', 'email', 'numero_clase', 'ciclo', 'carrera')
         labels = {
             'nombre':'Nombre',
             'apellido':'Apellido',
-            'fechaNacimiento':'Fecha de Nacimiento',
-            'matricula':'Matrícula'
+            'matricula':'Matrícula o ID',
+            'email':'Correo Electrónico',
+            'numero_clase':'Número de Clase',
+            'ciclo':'Ciclo o Período',
+            'carrera':'Carrera',
         }
-        widgets = {
-            'fechaNacimiento': DateInput()
+
+    def __init__(self, *args, **kwargs):
+        super(EstudianteForm, self).__init__(*args, **kwargs)
+        self.fields['carrera'].empty_label = '--Seleccione--'
+        self.fields['carrera'].help_text = 'Si no aparecen opciones en la lista, agregar una carrera.'
+        self.fields['email'].help_text = 'El correo debe pertenecer al dominio @ce.pucmm.edu.do'
+
+    def clean(self):
+        mail = self.cleaned_data.get('email')
+        dominio = mail.split('@')[1]
+        dom_aceptado = ['ce.pucmm.edu.do']
+        if dominio not in dom_aceptado:
+            raise forms.ValidationError('ERROR: El dominio del correo debe ser @ce.pucmm.edu.do')
+
+        return self.cleaned_data
+
+class CarreraForm(forms.ModelForm):
+
+    class Meta:
+        model = Carrera
+        fields = ('nombre', 'codigo')
+        labels = {
+            'nombre':'Nombre',
+            'codigo':'Código'
         }
 
 class ProyectoForm(forms.ModelForm):
@@ -79,7 +110,7 @@ class ProyectoForm(forms.ModelForm):
         'size': '8',
         'title': 'dlbox',
         'name': 'items',
-    }), queryset=Estudiante.objects.filter(eliminado=False))
+    }), queryset=Estudiante.objects.filter(eliminado=False).exclude(proyecto__equipo__isnull = False))
 
     class Meta:
         model = Proyecto
@@ -163,44 +194,28 @@ class ClasificacionForm(forms.ModelForm):
             'nombre': 'Nombre'
         }
 
-class EvaluacionForm(forms.ModelForm):
-
-    class Meta:
-        model = Evaluacion
-        fields = ('rubrica', 'programacion', 'ponderacion', 'observaciones')
-        labels = {
-            'rubrica': 'Rúbrica',
-            'programacion': 'Programación',
-            'ponderacion': 'Ponderación',
-            'observaciones': 'Observaciones'
-        }
-
 class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('nombre', 'apellido', 'fechaNacimiento', 'rol', 'user')
+        fields = ('nombre', 'apellido', 'email', 'rol', 'user')
         labels = {
             'nombre':"Nombre",
             'apellido':"Apellido",
-            'fechaNacimiento':"Fecha de Nacimiento",
+            'email':"Correo Académico",
             'rol': "Rol",
             'user': "Nombre de Usuario"
-        }
-        widgets = {
-            'fechaNacimiento': DateInput()
-            # 'password': PasswordInput(),
         }
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].disabled=True
         self.fields['apellido'].disabled=True
-        self.fields['fechaNacimiento'].disabled=True
+        self.fields['email'].disabled=True
         self.fields['rol'].disabled=True
         self.fields['user'].disabled=True
         self.fields['nombre'].required=False
         self.fields['apellido'].required=False
-        self.fields['fechaNacimiento'].required=False
+        self.fields['email'].required=False
         self.fields['rol'].required=False
         self.fields['user'].required=False

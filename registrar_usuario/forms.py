@@ -9,34 +9,24 @@ class UsuarioForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('nombre', 'apellido', 'fechaNacimiento', 'rol', 'user')
+        fields = ('nombre', 'apellido', 'email')
         labels = {
             'nombre':"Nombre",
             'apellido':"Apellido",
-            'fechaNacimiento':"Fecha de Nacimiento",
-            'rol': "Rol",
-            'user': "Nombre de Usuario"
-        }
-        widgets = {
-            'fechaNacimiento': DateInput()
-            # 'password': PasswordInput(),
+            'email': "Correo Académico"
         }
 
 class FirstUsuarioForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('nombre', 'apellido', 'fechaNacimiento', 'rol', 'user')
+        fields = ('nombre', 'apellido', 'rol', 'user')
         labels = {
             'nombre':"Nombre",
             'apellido':"Apellido",
-            'fechaNacimiento':"Fecha de Nacimiento",
             'rol': "Rol",
         }
-        widgets = {
-            'fechaNacimiento': DateInput()
-            # 'password': PasswordInput(),
-        }
+
     def __init__(self, *args, **kwargs):
         super(FirstUsuarioForm, self).__init__(*args, **kwargs)
         self.fields['user'].required = False

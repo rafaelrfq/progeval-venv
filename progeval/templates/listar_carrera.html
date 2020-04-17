@@ -1,0 +1,40 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<br>
+<a href="{% url 'coord_carrera' %}" class="btn btn-outline-success">
+    Agregar nueva carrera
+</a><br><br>
+<table class="table table-bordered" id="datatable" style="background-color: white;">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <th>Nombre</th>
+            <th>Código</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if listar_carrera %}
+            {% for carrera in listar_carrera %}
+                <tr>
+                    {% if carrera.eliminado == False %}
+                        <td>{{carrera.nombre}}</td>
+                        <td>{{carrera.codigo}}</td>
+                        <td align="center">
+                            <a href="{% url 'carrera_update' carrera.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'carrera_delete' carrera.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" align="center">No hay datos disponibles.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock content %}

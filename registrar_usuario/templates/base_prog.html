@@ -20,7 +20,11 @@
   <!-- DuallistBox -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-duallistbox.css' %}">
   <script src="{% static 'scripts/jquery.bootstrap-duallistbox.js' %}"></script>
-
+  <!-- Datatables -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap4.css' %}">
+  <script src="{% static 'scripts/datatables.js' %}"></script>
+  <!-- jQuery and icons -->
   <script src="https://kit.fontawesome.com/84376b9606.js" crossorigin="anonymous"></script>
   <script src="{% static 'scripts/jquery.min.js' %}"></script>
   <style>
@@ -75,6 +79,149 @@
       font-size: 26px;
       color: black;
       text-decoration: underline;
+    }
+    html, body {
+    min-height: 100%;
+    }
+    h1 {
+    font-weight: 400;
+    }
+    h4 {
+    margin-bottom: 0;
+    }
+    hr {
+    margin: 20px 0;
+    }
+    .main-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3px;
+    }
+    form {
+    width: 100%;
+    padding: 20px;
+    box-shadow: 0 2px 5px #ccc; 
+    background: rgb(250, 250, 250);
+    }
+    th, td {
+    width: 12%;
+    text-align: center;
+    vertical-align: unset;
+    line-height: 18px;
+    font-weight: 400;
+    word-break: break-all;
+    }
+    table#teibol{
+        border: 1px solid black;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+    table#teibol th{
+        border: 1px solid lightgray;
+        background-color: black;
+        color: white;
+        font-weight: bold;
+    }
+    table#teibol td{
+        border: 1px solid black;
+        padding-bottom: 5px;
+    }
+    .first-col {
+    width: 40%;
+    text-align: left;
+    }
+    textarea:hover {
+    border: 1px solid #095484;
+    outline: none;
+    }
+    .comments-block, .radio-block {
+    margin: 30px 0;
+    }
+    .comments, question, .answer, .question-answer, table {
+    width: 100%;
+    }
+    .comments {
+    margin: 0;
+    }
+    small {
+    display: block;
+    line-height: 18px;
+    opacity: 0.5;
+    }
+    textarea {
+    width: calc(100% - 6px);
+    }
+    .question-answer >div {
+    display: inline-block;
+    margin-left: 30px;
+    }
+    .btn-block {
+    text-align: center;
+    }
+    button {
+    width: 150px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px; 
+    background: #095484;
+    font-size: 16px;
+    color: #fff;
+    cursor: pointer;
+    }
+    button:hover {
+    background: #0666a3;
+    }
+    @media (min-width: 568px) {
+    .comments-block, .radio-block {
+    display: flex;
+    justify-content: space-between;
+    }
+    .comments  {
+    width: 30%;
+    }
+    .answer {
+    width: 70%;
+    }
+    .question, .question-answer {
+    width: 50%;
+    }
+    th, td {
+    word-break: keep-all;
+    }
+    }
+    .titulo {
+      text-align: center;
+      font-size: 3;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
+    .teibol1{
+      border-collapse: collapse;
+      border: 1px solid black;
+      font-size: 3;
+    }
+    .teibol1 th{
+      padding-top: 4px;
+      padding-bottom: 0px;
+      text-align: left;
+      font-weight: bold;
+      background-color: black;
+      color: white;
+      padding-left: 3px;
+      border: 1px solid lightgray;
+    }
+    .teibol1 td{
+      padding-top: 4px;
+      padding-bottom: 0px;
+      padding-left: 3px;
+      border: 1px solid black;
+      text-align: left;
+    }
+    .errorlist{
+      color: white;
+      background-color: red;
+      font-weight: bold;
     }
   </style>
 </head>
@@ -168,7 +315,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'user_insert' %}" class="nav-link">
+                <a href="{% url 'usuario_insert' %}" class="nav-link">
                   <i class="nav-icon fas fa-database"></i>
                   <p>Registrar</p>
                 </a>
@@ -198,6 +345,29 @@
               </li>
               <li class="nav-item">
                 <a href="{% url 'estudiante_list' %}" class="nav-link">
+                  <i class="nav-icon fas fa-list"></i>
+                  <p>Listar</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-graduation-cap"></i>
+              <p>
+                Carreras
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'coord_carrera' %}" class="nav-link">
+                  <i class="nav-icon fas fa-database"></i>
+                  <p>Insertar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'carrera_list' %}" class="nav-link">
                   <i class="nav-icon fas fa-list"></i>
                   <p>Listar</p>
                 </a>
@@ -284,6 +454,8 @@
 <script src="{% static 'scripts/adminlte.min.js' %}"></script>
 <!-- DuallistBox -->
 <script src="{% static 'scripts/jquery.bootstrap-duallistbox.js' %}"></script>
+<!-- Datatables -->
+<script src="{% static 'scripts/datatables.js' %}"></script>
 
 <script>
   function message() {
@@ -291,7 +463,32 @@
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
-  $('.duallistbox').bootstrapDualListbox();
+  $('.duallistbox').bootstrapDualListbox({
+      filterPlaceHolder: 'Filtrar datos',
+      filterTextClear: 'Mostrar todos',
+      infoText: 'Mostrando los {0}',
+      infoTextFiltered: '<span class="label label-warning">Filtrado</span> {0} de {1}',
+      infoTextEmpty: 'Lista vacía'
+  });
+  $(document).ready( function () {
+  $('#datatable').DataTable({
+      "language": {
+          "lengthMenu": "Mostrar _MENU_ entradas por página",
+          "zeroRecords": "No se encontraron datos",
+          "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+          "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+          "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+          "emptyTable":     "No hay datos disponibles",
+          "paginate": {
+              "first":      "Primero",
+              "last":       "Último",
+              "next":       "Siguiente",
+              "previous":   "Anterior"
+          },
+          "search": "Buscar:",
+      }
+      });
+  });
   window.onload = message();
 </script>
 </body>

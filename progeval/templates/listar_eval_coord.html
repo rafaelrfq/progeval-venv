@@ -4,14 +4,14 @@
 {% block content %}
 
 <br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Rúbrica</th>
             <th>Proyecto y Programación</th>
             <th>Ponderación</th>
             <th>Observaciones</th>
-            <th>Juez(a)</th>
+            <th>Jurado</th>
             <th>Opciones</th>
         </tr>
     </thead>
@@ -26,12 +26,8 @@
                         <td>{{eval.observaciones}}</td>
                         <td>{{eval.juez}}</td>
                         <td align="center">
-                            <a href="#" class="btn btn-outline-info"><i class="fas fa-clipboard-check"></i>
-                                Ver ficha
-                            </a> | 
-                            <a href="{% url 'pdf_view' eval.id %}" target="_blank" class="btn btn-outline-danger"><i class="far fa-file-pdf"></i>
-                                Exportar PDF
-                            </a>
+                            <a href="{% url 'eval_ficha' eval.id %}" class="btn btn-outline-info" title="Ver ficha"><i class="fas fa-clipboard-check"></i></a>
+                            <a href="{% url 'pdf_view' eval.id %}" target="_blank" class="btn btn-outline-danger" title="Exportar a PDF"><i class="far fa-file-pdf"></i></a>
                         </td>
                     {% endif %}
                 </tr>

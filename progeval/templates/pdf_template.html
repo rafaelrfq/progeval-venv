@@ -129,7 +129,7 @@
         </tr>
         {% for integrante in proyecto.equipo.all %}
             <tr>
-                <td>{{ integrante }}</td>
+                <td>{{ integrante.nombre }} {{ integrante.apellido }}</td>
                 <td>{{ integrante.matricula }}</td>
             </tr>
         {% endfor %}

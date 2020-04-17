@@ -10,12 +10,25 @@ ESTADO = [
     ('Pospuesta', 'Pospuesta'),
 ]
 
-class Estudiante(Persona):
-    matricula = models.CharField(max_length=9, unique=True)
+class Carrera(models.Model):
+    nombre = models.CharField(max_length=100)
+    codigo = models.CharField(max_length=10)
     eliminado = models.BooleanField(default=False)
 
     def __str__(self):
-        nomb = self.nombre + ' ' + self.apellido
+        nomb = self.codigo
+        return nomb
+
+class Estudiante(Persona):
+    matricula = models.CharField(max_length=9, unique=True)
+    eliminado = models.BooleanField(default=False)
+    email = models.EmailField(unique=True)
+    numero_clase = models.CharField(max_length=70)
+    ciclo = models.CharField(max_length=50)
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+
+    def __str__(self):
+        nomb = self.nombre + ' ' + self.apellido + '  -  ' + self.carrera.codigo
         return nomb
 
 class Item(models.Model):
@@ -96,3 +109,14 @@ class Evaluacion(models.Model):
         eval = cls(rubrica=rubrica, programacion=programacion, ponderacion=ponderacion, observaciones=observaciones, juez=juez)
         # we could filter data here if necessary
         return eval
+
+class IndicadorEvaluado(models.Model):
+    ponderacion = models.PositiveIntegerField()
+    indicador = models.ForeignKey(Item, on_delete=models.CASCADE)
+    evaluacion = models.ForeignKey(Evaluacion, on_delete=models.CASCADE)
+
+    @classmethod
+    def create(cls, ponderacion, indicador, evaluacion):
+        indicador_evaluado = cls(ponderacion=ponderacion, indicador=indicador, evaluacion=evaluacion)
+        # we could filter data here if necessary
+        return indicador_evaluado

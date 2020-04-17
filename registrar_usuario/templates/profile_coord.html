@@ -11,7 +11,7 @@
         {{ form.apellido|as_crispy_field }}
     </div>
     <div class="col-md-4">
-        {{ form.fechaNacimiento|as_crispy_field }}
+        {{ form.email|as_crispy_field }}
     </div>
 </div>
 <div class="row">
@@ -21,14 +21,11 @@
     <div class="col-md-4">
         {{ form.user|as_crispy_field }}
     </div>
-    <div class="col-md-4">
-        <a href="{% url 'jurado_home' %}">
-            <div class="info-box mb-3 bg-gray" style="width: 300px;">
-                <span class="info-box-icon"><i class="fab fa-flipboard"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text" style="margin-top: 10px;"><h3>Ir al dashboard</h3></span>
-                </div>
-            </div>
+</div> <br>
+<div class="row">
+    <div style="margin-left: 41%;">
+        <a href="{% url 'coord_home' %}" class="btn-lg btn-primary"><i class="fab fa-flipboard"></i>
+            Volver al dashboard
         </a>
     </div>
 </div>

@@ -41,18 +41,23 @@ def first_user(request):
             if User.objects.filter(username=username).exists():
                 messages.error(request, 'Nombre de usuario ya existe.')
             else:
-                user = User.objects.create_user(username=username, password=pw1)
-                user.is_active = True
-                user.save()
-                usr = User.objects.get(username=username)
                 nombre = request.POST['nombre']
                 apellido = request.POST['apellido']
-                fecha = request.POST['fecha']
+                email = request.POST['email']
                 rol = request.POST['rol']
-                usuario = Usuario.create(nombre, apellido, fecha, rol, usr)
-                usuario.save()
-                messages.success(request, 'Usuario registrado!')
-                return redirect('/')
+                dominio = email.split('@')[1]
+                if dominio == 'ce.pucmm.edu.do':
+                    user = User.objects.create_user(username=username, password=pw1)
+                    user.is_active = True
+                    user.save()
+                    usr = User.objects.get(username=username)
+                    usuario = Usuario.create(nombre, apellido, email, rol, usr)
+                    usuario.save()
+                    messages.success(request, 'Usuario registrado')
+                    return redirect('/')
+                else:
+                    messages.error(request, 'ERROR: El dominio del correo debe ser @ce.pucmm.edu.do')
+                    return redirect('/registro')
         else:
             messages.error(request, 'Los passwords no coinciden.')
     form = UserCreationForm()
@@ -60,10 +65,11 @@ def first_user(request):
     return render(request, "firstUser.html", {'form': form, 'form1': form1})
 
 @login_required(login_url='/')
-def user_register(request):
+def usuario_register(request):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
+        form = UsuarioForm()
         titulo = 'Insertar Nuevo Usuario'
         if request.method == "POST":
             username = request.POST['username']
@@ -71,43 +77,48 @@ def user_register(request):
             pw2 = request.POST['password2']
             if pw1 == pw2:
                 if User.objects.filter(username=username).exists():
-                    messages.error(request, 'Nombre de usuario ya existe.')
+                    messages.error(request, 'ERROR: Nombre de usuario ya existe.')
                 else:
-                    user = User.objects.create_user(username=username, password=pw1)
-                    user.is_active = True
-                    user.save()
-                    return redirect("/usuario/registrar")
+                    nombre = request.POST['nombre']
+                    apellido = request.POST['apellido']
+                    email = request.POST['email']
+                    rol = request.POST['rol']
+                    dominio = email.split('@')[1]
+                    if dominio == 'ce.pucmm.edu.do':
+                        user = User.objects.create_user(username=username, password=pw1)
+                        user.is_active = True
+                        user.save()
+                        usr = User.objects.get(username=username)
+                        usuario = Usuario.create(nombre, apellido, email, rol, usr)
+                        usuario.save()
+                        messages.success(request, 'Usuario registrado')
+                        return redirect('/usuario/registrar')
+                    else:
+                        messages.error(request, 'ERROR: El dominio del correo debe ser @ce.pucmm.edu.do')
+                        return redirect('/usuario/registrar')
             else:
-                messages.error(request, 'Los passwords no coinciden.')
-        form = UserCreationForm()
-        return render(request, "user_form2.html", {'form': form, 'titulo': titulo})
+                messages.error(request, 'ERROR: Las contraseñas no coinciden.')
+        context = {'form': form, 'titulo': titulo}
+        return render(request, "user_form.html", context)
 
 @login_required(login_url='/')
-def usuario_register(request, id=0):
+def usuario_update(request, id=0):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
-        user = User.objects.latest('date_joined')
         if request.method == "POST":
-            if id==0:
-                form = UsuarioForm(request.POST)
-            else:
-                usuario = Usuario.objects.get(pk=id)
-                form = UsuarioForm(request.POST, instance=usuario)
+            usuario = Usuario.objects.get(pk=id)
+            form = UsuarioForm(request.POST, instance=usuario)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Usuario insertado.')
+                messages.success(request, 'Usuario actualizado.')
                 return redirect('/usuario/listar')
         else:
-            if id==0:
-                titulo = 'Insertar Nuevo Usuario'
-                form = UsuarioForm(initial={'user': user.id})
-            else:
-                titulo = 'Editar Usuario Existente'
-                usuario = Usuario.objects.get(pk=id)
-                form = UsuarioForm(instance=usuario)
+            titulo = 'Editar Usuario Existente'
+            usuario = Usuario.objects.get(pk=id)
+            form = UsuarioForm(instance=usuario)
         
-        return render(request, "user_form.html", {'form': form, 'titulo': titulo})
+        return render(request, "user_form2.html", {'form': form, 'titulo': titulo}) 
 
 @login_required(login_url='/')
 def user_delete(request, id):

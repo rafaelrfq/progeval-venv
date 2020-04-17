@@ -19,6 +19,11 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-duallistbox.css' %}">
+  <!-- Datatables -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/datatables.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap4.css' %}">
+  <script src="{% static 'scripts/datatables.js' %}"></script>
+
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -28,6 +33,11 @@
   <script src="https://kit.fontawesome.com/84376b9606.js" crossorigin="anonymous"></script>
   <script src="{% static 'scripts/jquery.min.js' %}"></script>
   <style>
+    .errorlist{
+      color: white;
+      background-color: red;
+      font-weight: bold;
+    }
     .titulo-nav{
       font-size: 26px;
       color: black;
@@ -264,7 +274,7 @@
         <div class="info">
           <a href="{% url 'profile' %}" class="d-block">
             <i class="nav-icon fas fa-user-circle" style="margin-right: 10px;"></i>
-            {{request.user}} - Juez(a)
+            {{request.user}} - Jurado
           </a>
         </div>
       </div>
@@ -332,6 +342,8 @@
 <script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'scripts/adminlte.min.js' %}"></script>
+<!-- Datatables -->
+<script src="{% static 'scripts/datatables.js' %}"></script>
 
 <script>
   function message() {
@@ -339,6 +351,25 @@
     x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
   }
+  $(document).ready( function () {
+  $('#datatable').DataTable({
+      "language": {
+          "lengthMenu": "Mostrar _MENU_ entradas por página",
+          "zeroRecords": "No se encontraron datos",
+          "info": "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+          "infoEmpty": "Mostrando 0 a 0 de 0 entradas",
+          "infoFiltered": "(filtrado de _MAX_ entradas totales)",
+          "emptyTable":     "No hay datos disponibles",
+          "paginate": {
+              "first":      "Primero",
+              "last":       "Último",
+              "next":       "Siguiente",
+              "previous":   "Anterior"
+          },
+          "search": "Buscar:",
+      }
+      });
+  });
   window.onload = message();
 </script>
 

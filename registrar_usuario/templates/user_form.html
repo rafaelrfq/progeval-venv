@@ -3,33 +3,50 @@
 
 {% block content %}
 <br>
-<!-- <p>
+<form action="" method="POST" autocomplete="off">
     {{ formset.errors }}
-    {{ formset.non_form_errors }}
+    {{ form.non_form_errors }}
     {{ form.errors }}
-    {{ formset.non_field_errors }}
-</p> -->
-<form action="" method="post" autocomplete="off">
+    {{ form.non_field_errors }}
     {% csrf_token %}
     <div class="row">
         <div class="col-md-4">
-            {{ form.nombre|as_crispy_field }}
+            <label>Nombre de Usuario</label>
+            <input type="text" name="username" class="form-control" placeholder="Nombre de Usuario" required>
         </div>
         <div class="col-md-4">
-            {{ form.apellido|as_crispy_field }}
+            <label>Contraseña</label>
+            <input type="password" name="password1" class="form-control" placeholder="Contraseña" required>
         </div>
         <div class="col-md-4">
-            {{ form.fechaNacimiento|as_crispy_field }}
+            <label>Confirmar Contraseña</label>
+            <input type="password" name="password2" class="form-control" placeholder="Contraseña" required>
         </div>
-    </div>
+    </div><br>
     <div class="row">
-        <div class="col-md-8">
-            {{ form.rol|as_crispy_field }}
+        <div class="col-md-4">
+            <label>Nombre</label>
+            <input type="text" name="nombre" class="form-control" placeholder="Nombre" required>
         </div>
         <div class="col-md-4">
-            {{ form.user|as_crispy_field }}
+            <label>Apellido</label>
+            <input type="text" name="apellido" class="form-control" placeholder="Apellido" required>
         </div>
-    </div>
+        <div class="col-md-4">
+            <label>Correo Académico</label>
+            <input type="email" name="email" class="form-control" placeholder="Correo Electrónico" required>
+        </div>
+    </div><br>
+    <div class="row">
+        <div class="col-md-6">
+            <label>Rol</label>
+            <select id="rol" name="rol" required>
+                <option value="">--Seleccione--</option>
+                <option value="1">Coordinador/a</option>
+                <option value="2">Jurado</option>
+              </select>
+        </div>
+    </div><br>
     <div class="row">
         <div class="col-md-8">
             <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>

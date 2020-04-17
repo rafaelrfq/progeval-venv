@@ -9,8 +9,8 @@ from django.forms import inlineformset_factory
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import ProgForm, EstudianteForm, ProyectoForm, ItemForm, RubricaForm, ClasificacionForm, ProfileForm, GrupoForm
-from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Grupo, Item, Estudiante
+from .forms import ProgForm, EstudianteForm, ProyectoForm, ItemForm, RubricaForm, ClasificacionForm, ProfileForm, GrupoForm, CarreraForm
+from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Grupo, Item, Estudiante, Carrera, IndicadorEvaluado
 from registrar_usuario.views import userRole
 from registrar_usuario.models import Usuario
 from datetime import datetime
@@ -53,13 +53,12 @@ def programacion(request, id=0):
             rub = Rubrica.objects.get(activa=True)
         except ObjectDoesNotExist:
             rub = None
+        titulo = 'Programación de presentación de proyectos'
         if request.method == "GET":
             if id==0 and rub != None:
                 form = ProgForm(initial={'rubrica': rub.id, 'estado': 'Programada'})
-                titulo = 'Programación de presentación de proyectos'
             elif id==0 and rub == None:
                 form = ProgForm()
-                titulo = 'Programación de presentación de proyectos'
             else:
                 programacion = Programacion.objects.get(pk=id)
                 form = ProgForm(instance=programacion)
@@ -113,10 +112,10 @@ def insertar_estudiante(request, id=0):
     if userRole(request) == 2:
         return redirect('/jurado_home')
     elif userRole(request) == 1:
+        titulo = 'Insertar nuevo estudiante'
         if request.method == "GET":
             if id==0:
                 form = EstudianteForm()
-                titulo = 'Insetar nuevo estudiante'
             else:
                 estud = Estudiante.objects.get(pk=id)
                 form = EstudianteForm(instance=estud)
@@ -130,9 +129,10 @@ def insertar_estudiante(request, id=0):
                 form = EstudianteForm(request.POST, instance=estud)
             if form.is_valid():
                 form.save()
-            nomb = form.cleaned_data.get('nombre')
-            messages.success(request, 'Estudiante ' + nomb + ' insertado.')
-            return redirect('/coord/estudiante')
+                nomb = form.cleaned_data.get('nombre')
+                messages.success(request, 'Estudiante ' + nomb + ' insertado.')
+                return redirect('/coord/estudiante')
+        return render(request, "insertar_estudiante.html", {'form':form, 'titulo': titulo})
 
 @login_required(login_url='/')
 def delete_estudiante(request, id):
@@ -152,6 +152,50 @@ def listar_estudiante(request):
         titulo = 'Listado de estudiantes'
         context = {'listar_estudiante': Estudiante.objects.all(), 'titulo': titulo}
         return render(request, "listar_estudiante.html", context)
+
+@login_required(login_url='/')
+def insertar_carrera(request, id=0):
+    if userRole(request) == 2:
+        return redirect('/jurado_home')
+    elif userRole(request) == 1:
+        if request.method == "GET":
+            if id==0:
+                form = CarreraForm()
+                titulo = 'Insertar nueva carrera'
+            else:
+                carrera = Carrera.objects.get(pk=id)
+                form = CarreraForm(instance=carrera)
+                titulo = 'Editar carrera existente'
+            return render(request, "insertar_carrera.html", {'form':form, 'titulo': titulo})
+        else:
+            if id==0:
+                form = CarreraForm(request.POST)
+            else:
+                carrera = Carrera.objects.get(pk=id)
+                form = CarreraForm(request.POST, instance=carrera)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Carrera insertada.')
+            return redirect('/coord/carrera')
+
+@login_required(login_url='/')
+def delete_carrera(request, id):
+    if userRole(request) == 2:
+        return redirect('/jurado_home')
+    elif userRole(request) == 1:
+        carrera = Carrera.objects.get(pk=id)
+        carrera.eliminado = True
+        carrera.save()
+        return redirect('/coord/carrera/listar')
+
+@login_required(login_url='/')
+def listar_carrera(request):
+    if userRole(request) == 2:
+        return redirect('/jurado_home')
+    elif userRole(request) == 1:
+        titulo = 'Listado de Carreras'
+        context = {'listar_carrera': Carrera.objects.all(), 'titulo': titulo}
+        return render(request, "listar_carrera.html", context)
 
 @login_required(login_url='/')
 def insertar_proyecto(request, id=0):
@@ -433,21 +477,48 @@ def evaluacion(request, id):
         proyecto = Proyecto.objects.get(pk=prog.proyecto.id)
         rub = prog.rubrica
         grupos = Grupo.objects.filter(rubrica=rub.id)
+        usuario = Usuario.objects.get(user=request.user.id)
         titulo = 'Ficha de Evaluación'
-        context = {'evaluacion': grupos, 'proyecto': proyecto, 'prog': prog, 'titulo': titulo, 'valores': range(1, rub.valorIndicador+1)}
+        context = {'evaluacion': grupos, 'proyecto': proyecto, 'prog': prog, 'usuario': usuario, 'titulo': titulo, 'valores': range(1, rub.valorIndicador+1)}
         if request.method == "POST":
             usuario = Usuario.objects.get(user=request.user.id)
             evaluacion = request.POST
             ponderacion = 0
+            ind_dict = {}
             observ = evaluacion.get('observaciones')
             for key in evaluacion:
-                if 'rad' in key:
-                    ponderacion += int(evaluacion[key])
+                for grupo in grupos:
+                    for indicador in grupo.items.all():  
+                        if str(indicador.id) == key:
+                            ponderacion += int(evaluacion[key])
+                            ind_dict[int(key)] = int(evaluacion[key])
             e = Evaluacion.create(rub, prog, ponderacion, observ, usuario)
             e.save()
+            eval = Evaluacion.objects.get(pk=e.id)
+            for key in ind_dict:
+                item = Item.objects.get(pk=key)
+                calif = int(ind_dict[key])
+                i = IndicadorEvaluado.create(calif, item, eval)
+                i.save()
             return redirect('/jurado/evaluacion/listar')
-        
         return render(request, 'evaluacion.html', context)
+
+@login_required(login_url='/')
+def ficha_evaluacion(request, id):
+    evaluacion = Evaluacion.objects.get(pk=id)
+    rubrica = Rubrica.objects.get(pk=evaluacion.rubrica.id)
+    grupos = Grupo.objects.filter(rubrica=rubrica.id)
+    prog = Programacion.objects.get(pk=evaluacion.programacion.id)
+    proyecto = Proyecto.objects.get(pk=prog.proyecto.id)
+    indicadores = IndicadorEvaluado.objects.filter(evaluacion=evaluacion)
+    jurado = Usuario.objects.get(pk=evaluacion.juez.id)
+    titulo = 'Ficha de Evaluación'
+    context = {'eval': evaluacion, 'grupos': grupos, 'proyecto': proyecto, 'prog': prog, 'jurado': jurado, 'titulo': titulo, 'indicadores': indicadores, 'valores': range(1, rubrica.valorIndicador+1)}
+    if userRole(request) == 1:
+        return render(request, 'ficha_evaluada_coord.html', context)
+    elif userRole(request) == 2:
+        return render(request, 'ficha_evaluada_jurado.html', context)
+
 
 @login_required(login_url='/')
 def listar_evaluacion(request):
@@ -467,7 +538,7 @@ def calificacionFinal(evaluaciones):
         total += eval.ponderacion
     division = total/n
     modulo = division % 10
-    total = int(division) if modulo < 5 else int(division+1) #redondeo cuando la parte decimal es mayor o igual a 5
+    total = int(division) if modulo < 5 else int(division+1) #round up when the decimal part is 5 or higher
     return total
 
 def letra(total):

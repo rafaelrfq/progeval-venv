@@ -8,7 +8,7 @@
     Agregar nuevo proyecto
 </a>
 <br><br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Nombre</th>
@@ -35,17 +35,13 @@
                         <td>
                             <ul>
                             {% for integrante in proyecto.equipo.all %}
-                                <li>{{ integrante }}</li>
+                                <li>{{ integrante.nombre }} {{ integrante.apellido }}</li>
                             {% endfor %}
                             </ul>
                         </td>
                         <td align="center">
-                            <a href="{% url 'proyecto_update' proyecto.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                                Editar
-                            </a> | 
-                            <a href="{% url 'proyecto_delete' proyecto.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </a>
+                            <a href="{% url 'proyecto_update' proyecto.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'proyecto_delete' proyecto.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                         </td>
                     {% endif %}
                 </tr>

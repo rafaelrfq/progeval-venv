@@ -29,6 +29,11 @@ urlpatterns = [
     path('coord/estudiante/<int:id>/', views.insertar_estudiante, name='estudiante_update'), #edit existing student
     path('coord/estudiante/delete/<int:id>/', views.delete_estudiante, name='estudiante_delete'), #delete existing
     path('coord/estudiante/listar', views.listar_estudiante, name='estudiante_list'), #student listing
+    #carrera
+    path('coord/carrera', views.insertar_carrera, name='coord_carrera'), #career creation
+    path('coord/carrera/<int:id>/', views.insertar_carrera, name='carrera_update'), #edit existing career
+    path('coord/carrera/delete/<int:id>/', views.delete_carrera, name='carrera_delete'), #delete existing
+    path('coord/carrera/listar', views.listar_carrera, name='carrera_list'), #career listing
     #rubrica
     path('coord/rubrica', views.insertar_rubrica, name='coord_rub'), #rubrica creation
     path('coord/rubrica/<int:id>/', views.insertar_rubrica, name='rubrica_update'), #edit existing
@@ -43,6 +48,7 @@ urlpatterns = [
     path('jurado/eval_disp', views.evaluaciones_disp, name='eval_disp'), #available evaluations
     path('jurado/evaluacion/<int:id>/', views.evaluacion, name='evaluacion'), #evaluation
     path('jurado/evaluacion/listar', views.listar_evaluacion, name='eval_list'), #evaluation
+    path('jurado/evaluacion/ficha/<int:id>', views.ficha_evaluacion, name='eval_ficha'), #evaluation
     #path de PDF
     path('jurado/evaluacion/listar/pdf/<int:id>/', views.GeneratePdf.as_view(), name='pdf_view'), #pdf ficha evaluacion
 

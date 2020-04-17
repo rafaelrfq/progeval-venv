@@ -3,15 +3,15 @@
 
 {% block content %}
 <br>
-<a href="{% url 'user_insert' %}" class="btn btn-outline-success">
+<a href="{% url 'usuario_insert' %}" class="btn btn-outline-success">
     Agregar nuevo usuario
 </a><br><br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Nombre</th>
             <th>Apellido</th>
-            <th>Fecha de Nacimiento</th>
+            <th>Correo Académico</th>
             <th>Nombre de usuario</th>
             <th>Rol</th>
             <th>Opciones</th>
@@ -24,21 +24,17 @@
                     {% if usuario.eliminado == False %}
                         <td>{{usuario.nombre}}</td>
                         <td>{{usuario.apellido}}</td>
-                        <td>{{usuario.fechaNacimiento|date:"d-m-Y"}}</td>
+                        <td>{{usuario.email}}</td>
                         <td>{{usuario.user.username}}</td>
                         {% if usuario.rol == 1 %}
                             <td>Coordinador/a</td>
                         {% endif %}
                         {% if usuario.rol == 2 %}
-                            <td>Juez/a</td>
+                            <td>Jurado</td>
                         {% endif %}
                         <td align="center">
-                            <a href="{% url 'usuario_update' usuario.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                                Editar
-                            </a> | 
-                            <a href="{% url 'usuario_delete' usuario.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </a>
+                            <a href="{% url 'usuario_update' usuario.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'usuario_delete' usuario.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                         </td>
                     {% endif %}
                 </tr>
@@ -50,5 +46,4 @@
         {% endif %}
     </tbody>
 </table>
-
 {% endblock content %}

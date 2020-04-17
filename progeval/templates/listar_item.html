@@ -7,7 +7,7 @@
 <a href="{% url 'coord_rubitem' %}" class="btn btn-outline-success">
     Agregar nuevo indicador
 </a><br><br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Título</th>
@@ -23,12 +23,8 @@
                         <td>{{item.titulo}}</td>
                         <td>{{item.descripcion}}</td>
                         <td align="center">
-                            <a href="{% url 'item_update' item.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                                Editar
-                            </a> | 
-                            <a href="{% url 'item_delete' item.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </a>
+                            <a href="{% url 'item_update' item.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'item_delete' item.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                         </td>
                     {% endif %}
                 </tr>
@@ -40,5 +36,4 @@
         {% endif %}
     </tbody>
 </table>
-
 {% endblock content %}

@@ -8,7 +8,7 @@
     Agregar nueva rúbrica
 </a>
 <br><br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Nombre</th>
@@ -26,30 +26,28 @@
                     {% if rubrica.eliminado == False %}
                         <td>{{rubrica.nombre}}</td>
                         <td>{{rubrica.fechaCreacion|date:"d-m-Y"}}</td>
-                        <td>{{rubrica.activa}}</td>
+                        <td>{{rubrica.activa|yesno:"Sí, No"}}</td>
                         <td>{{rubrica.valorIndicador}} puntos</td>
                         <td>
                             {% for grupo in grupos %}
                                 {% if grupo.rubrica_id == rubrica.id %}
-                                    {{ grupo.nombre }} ({{ grupo.peso }} puntos)
+                                    <b>{{ grupo.nombre }} ({{ grupo.peso }} puntos)</b>
+                                    <br><br>
+                                    <b>Indicadores:</b>
                                     <br>
-                                    Ítems:
-                                    <ul>
+                                    {{ grupo.items.all|unordered_list}}
+                                    <!-- <ul>
                                     {% for item in grupo.items.all %}
                                         <li>{{ item.titulo }}</li>
                                     {% endfor %}
-                                    </ul>
+                                    </ul> -->
                                     <hr>
                                 {% endif %}
                             {% endfor %}
                         </td>
                         <td align="center">
-                            <a href="{% url 'rubrica_update' rubrica.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                                Editar
-                            </a><hr>
-                            <a href="{% url 'rubrica_delete' rubrica.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </a>
+                            <a href="{% url 'rubrica_update' rubrica.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'rubrica_delete' rubrica.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                         </td>
                     {% endif %}
                 </tr>

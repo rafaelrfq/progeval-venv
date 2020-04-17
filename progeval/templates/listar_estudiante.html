@@ -7,13 +7,16 @@
 <a href="{% url 'coord_estudiante' %}" class="btn btn-outline-success">
     Agregar nuevo estudiante
 </a><br><br>
-<table class="table table-bordered" style="background-color: white;">
+<table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Nombre</th>
             <th>Apellido</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Matrícula</th>
+            <th>Matrícula/ID</th>
+            <th>Correo Electrónico</th>
+            <th># de Clase</th>
+            <th>Período</th>
+            <th>Carrera</th>
             <th>Opciones</th>
         </tr>
     </thead>
@@ -24,22 +27,21 @@
                     {% if estud.eliminado == False %}
                         <td>{{estud.nombre}}</td>
                         <td>{{estud.apellido}}</td>
-                        <td>{{estud.fechaNacimiento|date:"d-m-Y"}}</td>
                         <td>{{estud.matricula}}</td>
+                        <td>{{estud.email}}</td>
+                        <td>{{estud.numero_clase}}</td>
+                        <td>{{estud.ciclo}}</td>
+                        <td>{{estud.carrera}}</td>
                         <td align="center">
-                            <a href="{% url 'estudiante_update' estud.id %}" class="btn btn-outline-success"><i class="fas fa-edit"></i>
-                                Editar
-                            </a> | 
-                            <a href="{% url 'estudiante_delete' estud.id %}" class="btn btn-outline-danger"><i class="fas fa-trash"></i>
-                                Eliminar
-                            </a>
+                            <a href="{% url 'estudiante_update' estud.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'estudiante_delete' estud.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
                         </td>
                     {% endif %}
                 </tr>
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="5" align="center">No hay datos disponibles.</td>
+                <td colspan="8" align="center">No hay datos disponibles.</td>
             </tr>
         {% endif %}
     </tbody>

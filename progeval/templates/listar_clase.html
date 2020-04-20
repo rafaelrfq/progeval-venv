@@ -1,0 +1,40 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<br>
+<a href="{% url 'coord_clase' %}" class="btn btn-outline-success">
+    Agregar nueva clase
+</a><br><br>
+<table class="table table-bordered" id="datatable" style="background-color: white;">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <th>Nombre</th>
+            <th>Número</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if listar_clase %}
+            {% for clase in listar_clase %}
+                <tr>
+                    {% if clase.eliminado == False %}
+                        <td>{{clase.nombre}}</td>
+                        <td>{{clase.numero}}</td>
+                        <td align="center">
+                            <a href="{% url 'clase_update' clase.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
+                            <a href="{% url 'clase_delete' clase.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" align="center">No hay datos disponibles.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock content %}

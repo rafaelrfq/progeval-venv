@@ -14,6 +14,7 @@
             <th>Correo Académico</th>
             <th>Nombre de usuario</th>
             <th>Rol</th>
+            <th>Departamento</th>
             <th>Opciones</th>
         </tr>
     </thead>
@@ -30,8 +31,9 @@
                             <td>Coordinador/a</td>
                         {% endif %}
                         {% if usuario.rol == 2 %}
-                            <td>Jurado</td>
+                            <td>Jurado/Invitado</td>
                         {% endif %}
+                        <td>{{usuario.dept}}</td>
                         <td align="center">
                             <a href="{% url 'usuario_update' usuario.id %}" class="btn btn-outline-success" title="Editar"><i class="fas fa-edit"></i></a>
                             <a href="{% url 'usuario_delete' usuario.id %}" class="btn btn-outline-danger" title="Eliminar"><i class="fas fa-trash"></i></a>
@@ -41,7 +43,7 @@
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="6" align="center">No hay datos disponibles.</td>
+                <td colspan="7" align="center">No hay datos disponibles.</td>
             </tr>
         {% endif %}
     </tbody>

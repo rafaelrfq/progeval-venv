@@ -1,7 +1,7 @@
 from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
-from .models import Programacion, Estado, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario, Grupo, Carrera
+from .models import Programacion, Estado, Proyecto, Clasificacion, Rubrica, Item, Estudiante, Usuario, Grupo, Carrera, Clase
 import datetime
 
 class DateInput(forms.DateInput):
@@ -22,15 +22,16 @@ class ProgForm(forms.ModelForm):
 
     class Meta:
         model = Programacion
-        fields = ('fecha', 'hora', 'estado', 'rubrica', 'presidenteJurado', 'jurado', 'proyecto')
+        fields = ('fecha', 'hora', 'estado', 'rubrica', 'presidenteJurado', 'jurado', 'proyecto', 'rubrica_reporte')
         labels = {
             'fecha': "Fecha",
             'hora': "Hora",
             'estado': "Estado",
-            'rubrica': "Rúbrica",
+            'rubrica': "Rúbrica Presentación",
             'jurado': "Jurado",
             'proyecto': "Proyecto",
-            'presidenteJurado': "Presidente de Jurado"
+            'presidenteJurado': "Presidente de Jurado",
+            'rubrica_reporte': "Rúbrica Reporte"
         }
         widgets = {
             'fecha': DateInput(),
@@ -40,6 +41,7 @@ class ProgForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProgForm, self).__init__(*args, **kwargs)
         self.fields['rubrica'].empty_label = '--Seleccione--'
+        self.fields['rubrica_reporte'].empty_label = '--Seleccione--'
         self.fields['proyecto'].empty_label = '--Seleccione--'
         self.fields['presidenteJurado'].empty_label = '--Seleccione--'
         self.fields['presidenteJurado'].help_text = 'Escoger un máximo de 3 jueces incluyendo al presidente. (2 como jurado, 1 como presidente.)'
@@ -62,6 +64,16 @@ class ProgForm(forms.ModelForm):
 
         return self.cleaned_data
 
+class ClaseForm(forms.ModelForm):
+
+    class Meta:
+        model = Clase
+        fields = {'nombre', 'numero'}
+        labels = {
+             'nombre':'Nombre',
+            'numero':'Número'
+        }
+
 class EstudianteForm(forms.ModelForm):
 
     class Meta:
@@ -80,6 +92,7 @@ class EstudianteForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(EstudianteForm, self).__init__(*args, **kwargs)
         self.fields['carrera'].empty_label = '--Seleccione--'
+        self.fields['numero_clase'].empty_label = '--Seleccione--'
         self.fields['carrera'].help_text = 'Si no aparecen opciones en la lista, agregar una carrera.'
         self.fields['email'].help_text = 'El correo debe pertenecer al dominio @ce.pucmm.edu.do'
 
@@ -114,10 +127,11 @@ class ProyectoForm(forms.ModelForm):
 
     class Meta:
         model = Proyecto
-        fields = ('nombre', 'clasificacion', 'asesor', 'equipo')
+        fields = ('nombre', 'clasificacion', 'asesor', 'equipo', 'numero_clase')
         labels = {
             'nombre':'Nombre',
             'clasificacion':'Clasificación',
+            'numero_clase': 'Número de Clase',
             'asesor':'Asesor',
             'equipo': 'Equipo'
         }
@@ -125,6 +139,7 @@ class ProyectoForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ProyectoForm, self).__init__(*args, **kwargs)
         self.fields['asesor'].empty_label = '--Seleccione--'
+        self.fields['numero_clase'].empty_label = '--Seleccione--'
         self.fields['asesor'].queryset = Usuario.objects.filter(rol=2)
         self.fields['clasificacion'].help_text = 'Puede seleccionar más de una. <br/>Si no aparecen opciones en la lista, agregar una clasificación usando el botón.'
         self.fields['asesor'].help_text = 'Si no aparecen opciones en la lista, agregar un usuario con rol de juez/a.'

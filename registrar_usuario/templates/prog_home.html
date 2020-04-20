@@ -2,6 +2,11 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+<style>
+    b {
+        font-size: medium;
+    }
+</style>
 <br>
 <h2>Información general</h2>
 <!-- first row -->
@@ -12,8 +17,8 @@
         <div class="info-box mb-3 bg-gradient-red">
             <span class="info-box-icon"><i class="fas fa-user"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Usuarios</h3></span>
-                <span class="info-box-number"><h3>{{ u }}</h3></span>
+                <span class="info-box-text"><b>Usuarios</b></span>
+                <span class="info-box-number"><b>{{ u }}</b></span>
             </div>
         </div>
         </a>
@@ -24,8 +29,8 @@
         <div class="info-box mb-3 bg-pink">
             <span class="info-box-icon"><i class="fas fa-user-graduate"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Estudiantes</h3></span>
-                <span class="info-box-number"><h3>{{ e }}</h3></span>
+                <span class="info-box-text"><b>Estudiantes</b></span>
+                <span class="info-box-number"><b>{{ e }}</b></span>
             </div>
         </div>
         </a>
@@ -36,8 +41,8 @@
         <div class="info-box mb-3 bg-gradient-cyan">
             <span class="info-box-icon"><i class="fas fa-code-branch"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Clasificaciones</h3></span>
-                <span class="info-box-number"><h3>{{ c }}</h3></span>
+                <span class="info-box-text"><b>Clasificaciones</b></span>
+                <span class="info-box-number"><b>{{ c }}</b></span>
             </div>
         </div>
         </a>
@@ -48,8 +53,8 @@
         <div class="info-box mb-3 bg-warning">
             <span class="info-box-icon"><i class="fas fa-project-diagram"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Proyectos</h3></span>
-                <span class="info-box-number"><h3>{{ p }}</h3></span>
+                <span class="info-box-text"><b>Proyectos</b></span>
+                <span class="info-box-number"><b>{{ p }}</b></span>
             </div>
         </div>
         </a>
@@ -64,8 +69,8 @@
         <div class="info-box mb-3 bg-success">
             <span class="info-box-icon"><i class="fas fa-clipboard"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Rúbricas</h3></span>
-                <span class="info-box-number"><h3>{{ r }}</h3></span>
+                <span class="info-box-text"><b>Rúbricas</b></span>
+                <span class="info-box-number"><b>{{ r }}</b></span>
             </div>
         </div>
         </a>
@@ -76,8 +81,8 @@
         <div class="info-box mb-3 bg-indigo">
             <span class="info-box-icon"><i class="fab fa-bitbucket"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Indicadores</h3></span>
-                <span class="info-box-number"><h3>{{ i }}</h3></span>
+                <span class="info-box-text"><b>Indicadores</b></span>
+                <span class="info-box-number"><b>{{ i }}</b></span>
             </div>
         </div>
         </a>
@@ -88,8 +93,8 @@
         <div class="info-box mb-3 bg-gray">
             <span class="info-box-icon"><i class="fas fa-tasks"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Programaciones</h3></span>
-                <span class="info-box-number"><h3>{{ pr }}</h3></span>
+                <span class="info-box-text"><b>Programaciones</b></span>
+                <span class="info-box-number"><b>{{ pr }}</b></span>
             </div>
         </div>
         </a>
@@ -100,8 +105,48 @@
         <div class="info-box mb-3 bg-purple">
             <span class="info-box-icon"><i class="fas fa-clipboard-check"></i></span>
             <div class="info-box-content">
-                <span class="info-box-text"><h3>Evaluaciones</h3></span>
-                <span class="info-box-number"><h3>{{ ev }}</h3></span>
+                <span class="info-box-text"><b>Evaluaciones p/jurado</b></span>
+                <span class="info-box-number"><b>{{ ev }}</b></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-3">
+        <a href="{% url 'clase_list' %}">
+        <div class="info-box mb-3 bg-gradient-orange">
+            <span class="info-box-icon"><i class="fas fa-book"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><b>Clases</b></span>
+                <span class="info-box-number"><b>{{ cl }}</b></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'carrera_list' %}">
+        <div class="info-box mb-3 bg-gradient-olive">
+            <span class="info-box-icon"><i class="fas fa-graduation-cap"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><b>Carreras</b></span>
+                <span class="info-box-number"><b>{{ ca }}</b></span>
+            </div>
+        </div>
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="{% url 'coord_prog_eval' %}">
+        <div class="info-box mb-3 bg-dark">
+            <span class="info-box-icon"><i class="fas fa-clipboard-list"></i></span>
+            <div class="info-box-content">
+                <span class="info-box-text"><b>Evaluaciones p/programación</b></span>
+                <span class="info-box-number"><b>{{ pev }}</b></span>
             </div>
         </div>
         </a>

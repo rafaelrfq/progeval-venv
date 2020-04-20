@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 ROL = [
     ('', '--Seleccione--'),
     (1, 'Coordinador/a'),
-    (2, 'Jurado'),
+    (2, 'Jurado e Invitado'),
 ]
 
 class Persona(models.Model):
@@ -27,6 +27,7 @@ class Usuario(Persona):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     rol = models.IntegerField(choices=ROL)
     email = models.EmailField(unique=True)
+    dept = models.CharField(max_length=100)
     eliminado = models.BooleanField(default=False)
 
     def __str__(self):
@@ -34,7 +35,7 @@ class Usuario(Persona):
         return nomb
 
     @classmethod
-    def create(cls, nombre, apellido, email, rol, user):
-        usuario = cls(nombre=nombre, apellido=apellido, email=email, rol=rol, user=user)
+    def create(cls, nombre, apellido, email, rol, dept, user):
+        usuario = cls(nombre=nombre, apellido=apellido, email=email, rol=rol, dept=dept, user=user)
         # we could filter data here if necessary
         return usuario

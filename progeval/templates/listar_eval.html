@@ -7,11 +7,12 @@
 <table class="table table-bordered" id="datatable" style="background-color: white;">
     <thead class="border-bottom font-weight-bold">
         <tr>
-            <th style="width: 10%;">Rúbrica</th>
-            <th style="width: 15%;">Proyecto y Programación</th>
+            <th style="width: auto;">Rúbrica</th>
+            <th style="width: auto;">Fecha y Hora de Realización</th>
+            <th style="width: auto;">Proyecto</th>
             <th style="width: 10%;">Ponderación</th>
             <th style="width: 45%;">Observaciones</th>
-            <th style="width: 20%;">Opciones</th>
+            <th style="width: 10%;">Opciones</th>
         </tr>
     </thead>
     <tbody>
@@ -20,19 +21,19 @@
                 <tr>
                     {% if eval.eliminado == False %}
                         <td>{{eval.rubrica}}</td>
-                        <td>{{eval.programacion}}</td>
+                        <td>{{eval.programacion.fecha|date:"d-m-Y"}} {{eval.hora|time:"H:i"}}</td>
+                        <td>{{eval.programacion.proyecto}}</td>
                         <td>{{eval.ponderacion}}</td>
                         <td>{{eval.observaciones}}</td>
                         <td align="center">
-                            <a href="{% url 'eval_ficha' eval.id %}" class="btn btn-outline-info" title="Ver ficha"><i class="fas fa-clipboard-check"></i></a>
-                            <a href="{% url 'pdf_view' eval.id %}" target="_blank" class="btn btn-outline-danger" title="Exportar a PDF"><i class="far fa-file-pdf"></i></a>
+                            <a href="{% url 'eval_ficha' eval.programacion.id %}" class="btn btn-outline-info" title="Ver ficha"><i class="fas fa-clipboard-check"></i></a>
                         </td>
                     {% endif %}
                 </tr>
             {% endfor %}
         {% else %}
             <tr>
-                <td colspan="5" align="center">No hay datos disponibles.</td>
+                <td colspan="6" align="center">No hay datos disponibles.</td>
             </tr>
         {% endif %}
     </tbody>

@@ -59,15 +59,21 @@
                 </div>
             </div><br>
             <div class="row">
-                <div class="col-md-8">
-                    <label>Rol</label>
+                <div class="col-md-6">
+                    <label>Departamento</label>
+                    <input type="text" name="dept" class="form-control" placeholder="Departamento" required>
+                </div>
+                <div class="col-md-6">
+                    <label>Rol</label><br>
                     <select id="rol" name="rol" required>
                         <option value="">--Seleccione--</option>
                         <option value="1">Coordinador/a</option>
-                        <option value="2">Jurado</option>
+                        <option value="2">Jurado e Invitado</option>
                       </select>
                 </div>
-                <div class="col-md-4">
+            </div>
+            <div class="row">
+                <div class="col-md-12">
                     <button type="submit" class="btn btn-success btn-block btn-lg" style="margin-top: 25px;"><i class="fas fa-database"></i>
                         Registrar
                     </button>

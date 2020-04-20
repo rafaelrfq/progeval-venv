@@ -45,13 +45,14 @@ def first_user(request):
                 apellido = request.POST['apellido']
                 email = request.POST['email']
                 rol = request.POST['rol']
+                dept = request.POST['dept']
                 dominio = email.split('@')[1]
                 if dominio == 'ce.pucmm.edu.do':
                     user = User.objects.create_user(username=username, password=pw1)
                     user.is_active = True
                     user.save()
                     usr = User.objects.get(username=username)
-                    usuario = Usuario.create(nombre, apellido, email, rol, usr)
+                    usuario = Usuario.create(nombre, apellido, email, rol, dept, usr)
                     usuario.save()
                     messages.success(request, 'Usuario registrado')
                     return redirect('/')
@@ -83,13 +84,14 @@ def usuario_register(request):
                     apellido = request.POST['apellido']
                     email = request.POST['email']
                     rol = request.POST['rol']
+                    dept = request.POST['dept']
                     dominio = email.split('@')[1]
                     if dominio == 'ce.pucmm.edu.do':
                         user = User.objects.create_user(username=username, password=pw1)
                         user.is_active = True
                         user.save()
                         usr = User.objects.get(username=username)
-                        usuario = Usuario.create(nombre, apellido, email, rol, usr)
+                        usuario = Usuario.create(nombre, apellido, email, rol, dept, usr)
                         usuario.save()
                         messages.success(request, 'Usuario registrado')
                         return redirect('/usuario/registrar')

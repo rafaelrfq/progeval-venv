@@ -9,11 +9,11 @@ from django.forms import inlineformset_factory
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from .forms import ProgForm, EstudianteForm, ProyectoForm, ItemForm, RubricaForm, ClasificacionForm, ProfileForm, GrupoForm, CarreraForm
-from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Grupo, Item, Estudiante, Carrera, IndicadorEvaluado
+from .forms import ProgForm, EstudianteForm, ProyectoForm, ItemForm, RubricaForm, ClasificacionForm, ProfileForm, GrupoForm, CarreraForm, ClaseForm
+from .models import Programacion, Estado, Evaluacion, Proyecto, Clasificacion, Rubrica, Grupo, Item, Estudiante, Carrera, IndicadorEvaluado, Clase
 from registrar_usuario.views import userRole
 from registrar_usuario.models import Usuario
-from datetime import datetime
+import datetime
 
 # Views a los que puede accesar el/la coodinador/a
 
@@ -30,6 +30,9 @@ def coord_home(request):
         clasificaciones = Clasificacion.objects.all()
         usuarios = Usuario.objects.all()
         evaluaciones = Evaluacion.objects.all()
+        clases = Clase.objects.all()
+        carreras = Carrera.objects.all()
+        prog_evaluadas = Programacion.objects.filter(ponderacion__lte=100)
 
         p = proyectos.count()
         r = rubricas.count()
@@ -38,10 +41,13 @@ def coord_home(request):
         pr = programaciones.count()
         c = clasificaciones.count()
         u = usuarios.count()
+        cl = clases.count()
+        ca = carreras.count()
         ev = evaluaciones.count()
+        pev = prog_evaluadas.count()
         titulo = 'Dashboard'
 
-        context = {'titulo': titulo, 'p': p, 'r': r, 'i': i, 'e': e, 'pr': pr, 'c': c, 'u': u, 'ev': ev}
+        context = {'titulo': titulo, 'p': p, 'r': r, 'i': i, 'e': e, 'pr': pr, 'c': c, 'u': u, 'ev': ev, 'cl': cl, 'ca': ca, 'pev': pev}
         return render(request, 'prog_home.html', context)
 
 @login_required(login_url='/')
@@ -154,6 +160,50 @@ def listar_estudiante(request):
         return render(request, "listar_estudiante.html", context)
 
 @login_required(login_url='/')
+def insertar_clase(request, id=0):
+    if userRole(request) == 2:
+        return redirect('/jurado_home')
+    elif userRole(request) == 1:
+        if request.method == "GET":
+            if id==0:
+                form = ClaseForm()
+                titulo = 'Insertar nueva clase'
+            else:
+                clase = Clase.objects.get(pk=id)
+                form = ClaseForm(instance=clase)
+                titulo = 'Editar clase existente'
+            return render(request, "insertar_clase.html", {'form':form, 'titulo': titulo})
+        else:
+            if id==0:
+                form = ClaseForm(request.POST)
+            else:
+                clase = Clase.objects.get(pk=id)
+                form = ClaseForm(request.POST, instance=clase)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Clase insertada.')
+            return redirect('/coord/clase')
+
+@login_required(login_url='/')
+def delete_clase(request, id):
+    if userRole(request) == 2:
+        return redirect('/jurado_home')
+    elif userRole(request) == 1:
+        clase = Clase.objects.get(pk=id)
+        clase.eliminado = True
+        clase.save()
+        return redirect('/coord/clase/listar')
+
+@login_required(login_url='/')
+def listar_clase(request):
+    if userRole(request) == 2:
+        return redirect('/jurado_home')
+    elif userRole(request) == 1:
+        titulo = 'Listado de Clases'
+        context = {'listar_clase': Clase.objects.all(), 'titulo': titulo}
+        return render(request, "listar_clase.html", context)
+
+@login_required(login_url='/')
 def insertar_carrera(request, id=0):
     if userRole(request) == 2:
         return redirect('/jurado_home')
@@ -222,6 +272,7 @@ def insertar_proyecto(request, id=0):
                 form.save()
                 messages.success(request, 'Proyecto insertado.')
                 return redirect('/coord/proyecto')
+        titulo = 'Insertar nuevo Proyecto'
         return render(request, "insertar_proyecto.html", {'form':form, 'titulo': titulo})
 
 @login_required(login_url='/')
@@ -409,6 +460,22 @@ def listar_clasificacion(request):
         return render(request, "listar_clasif.html", context)
 
 @login_required(login_url='/')
+def listar_prog_eval(request):
+    if userRole(request) == 2:
+        return redirect('/jurado_home/')
+    elif userRole(request) == 1:
+        titulo = 'Listado de programaciones evaluadas'
+        programaciones = Programacion.objects.all()
+        for prog in programaciones:
+            evaluaciones = Evaluacion.objects.filter(programacion=prog.id).filter(rubrica=prog.rubrica)
+            evaluaciones_reporte = Evaluacion.objects.filter(programacion=prog.id).filter(rubrica=prog.rubrica_reporte)
+            total = calificacionFinal(evaluaciones, evaluaciones_reporte)
+            Programacion.objects.filter(pk=prog.id).update(ponderacion=total)
+        programaciones = Programacion.objects.all()
+        context = {'titulo': titulo, 'listar_prog': programaciones}
+        return render(request, "listar_prog_eval.html", context)
+
+@login_required(login_url='/')
 def profile(request):
     usr = request.user
     queryset = Usuario.objects.filter(user=usr.id)
@@ -443,12 +510,16 @@ def jurado_home(request):
     elif userRole(request) == 2:
         titulo = 'Dashboard'
         usuario = Usuario.objects.get(user=request.user)
-        try:
-            evaluacion = Evaluacion.objects.get(juez=usuario)
-            prog = Programacion.objects.exclude(pk=evaluacion.programacion.id).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
-        except ObjectDoesNotExist:
-            prog = Programacion.objects.filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        antes = datetime.datetime.now() - datetime.timedelta(hours=1)
+        despues = datetime.datetime.now() + datetime.timedelta(hours=1)
+        hoy = datetime.date.today()
+        prog = Programacion.objects.none()
         evaluaciones = Evaluacion.objects.filter(juez=usuario)
+        if evaluaciones.exists():
+            for evaluacion in evaluaciones:
+                prog |= Programacion.objects.filter(~Q(pk=evaluacion.programacion.id)).filter(fecha=hoy.strftime("%Y-%m-%d"), hora__lte=despues.strftime("%H:%M:%S"), hora__gte=antes.strftime("%H:%M:%S")).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        else:
+            prog |= Programacion.objects.filter(fecha=hoy.strftime("%Y-%m-%d"), hora__lte=despues.strftime("%H:%M:%S"), hora__gte=antes.strftime("%H:%M:%S")).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
         e = evaluaciones.count()
         p = prog.count()
         return render(request, "jurado_home.html", {'prog': p, 'eval': e, 'titulo': titulo})
@@ -460,11 +531,16 @@ def evaluaciones_disp(request):
     elif userRole(request) == 2:
         user = request.user
         usuario = Usuario.objects.get(user=user.id)
-        try:
-            evaluacion = Evaluacion.objects.get(juez=usuario)
-            prog = Programacion.objects.exclude(pk=evaluacion.programacion.id).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
-        except ObjectDoesNotExist:
-            prog = Programacion.objects.filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        antes = datetime.datetime.now() - datetime.timedelta(hours=1)
+        despues = datetime.datetime.now() + datetime.timedelta(hours=1)
+        hoy = datetime.date.today()
+        prog = Programacion.objects.none()
+        evaluaciones = Evaluacion.objects.filter(juez=usuario)
+        if evaluaciones.exists():
+            for evaluacion in evaluaciones:
+                prog |= Programacion.objects.filter(~Q(pk=evaluacion.programacion.id)).filter(fecha=hoy.strftime("%Y-%m-%d"), hora__lte=despues.strftime("%H:%M:%S"), hora__gte=antes.strftime("%H:%M:%S")).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
+        else:
+            prog |= Programacion.objects.filter(fecha=hoy.strftime("%Y-%m-%d"), hora__lte=despues.strftime("%H:%M:%S"), hora__gte=antes.strftime("%H:%M:%S")).filter(Q(presidenteJurado=usuario.id) | Q(jurado=usuario.id)).distinct()
         titulo = 'Evaluaciones disponibles'
         return render(request, "eval_disp.html", {'listar_prog': prog, 'titulo': titulo})
 
@@ -486,13 +562,51 @@ def evaluacion(request, id):
             ponderacion = 0
             ind_dict = {}
             observ = evaluacion.get('observaciones')
+            hora = datetime.datetime.now()
             for key in evaluacion:
                 for grupo in grupos:
                     for indicador in grupo.items.all():  
                         if str(indicador.id) == key:
                             ponderacion += int(evaluacion[key])
                             ind_dict[int(key)] = int(evaluacion[key])
-            e = Evaluacion.create(rub, prog, ponderacion, observ, usuario)
+            e = Evaluacion.create(rub, prog, ponderacion, observ, hora, usuario)
+            e.save()
+            eval = Evaluacion.objects.get(pk=e.id)
+            for key in ind_dict:
+                item = Item.objects.get(pk=key)
+                calif = int(ind_dict[key])
+                i = IndicadorEvaluado.create(calif, item, eval)
+                i.save()
+            url = '/jurado/evaluacion_r/' + str(id)
+            return redirect(url)
+        return render(request, 'evaluacion.html', context)
+
+@login_required(login_url='/')
+def evaluacion_reporte(request, id):
+    if userRole(request) == 1:
+        return redirect('/coord_home')
+    elif userRole(request) == 2:
+        prog = Programacion.objects.get(pk=id)
+        proyecto = Proyecto.objects.get(pk=prog.proyecto.id)
+        rub = prog.rubrica_reporte
+        grupos = Grupo.objects.filter(rubrica=rub.id)
+        usuario = Usuario.objects.get(user=request.user.id)
+        titulo = 'Ficha de Evaluación Reporte Final'
+        context = {'evaluacion': grupos, 'proyecto': proyecto, 'prog': prog, 'usuario': usuario, 'titulo': titulo, 'valores': range(1, rub.valorIndicador+1)}
+        if request.method == "POST":
+            usuario = Usuario.objects.get(user=request.user.id)
+            evaluacion = request.POST
+            ponderacion = 0
+            ind_dict = {}
+            observ = evaluacion.get('observaciones')
+            hora = datetime.datetime.now()
+            for key in evaluacion:
+                for grupo in grupos:
+                    for indicador in grupo.items.all():  
+                        if str(indicador.id) == key:
+                            ponderacion += int(evaluacion[key])
+                            ind_dict[int(key)] = int(evaluacion[key])
+            e = Evaluacion.create(rub, prog, ponderacion, observ, hora, usuario)
             e.save()
             eval = Evaluacion.objects.get(pk=e.id)
             for key in ind_dict:
@@ -501,7 +615,7 @@ def evaluacion(request, id):
                 i = IndicadorEvaluado.create(calif, item, eval)
                 i.save()
             return redirect('/jurado/evaluacion/listar')
-        return render(request, 'evaluacion.html', context)
+        return render(request, 'evaluacion_reporte.html', context)
 
 @login_required(login_url='/')
 def ficha_evaluacion(request, id):
@@ -525,43 +639,52 @@ def listar_evaluacion(request):
     if userRole(request) == 1:
         return redirect('/coord_home')
     elif userRole(request) == 2:
-        juez = Usuario.objects.get(user=request.user)
-        evaluaciones = Evaluacion.objects.filter(juez=juez)
+        jurado = Usuario.objects.get(user=request.user)
+        evaluaciones = Evaluacion.objects.filter(juez=jurado)
         titulo = 'Evaluaciones realizadas'
         context = {'listar_eval': evaluaciones, 'titulo': titulo}
         return render(request, "listar_eval.html", context)
 
-def calificacionFinal(evaluaciones):
-    n = len(evaluaciones)
+def calificacionFinal(evaluaciones, evaluaciones_reporte):
+    n1 = len(evaluaciones)
+    n2 = len(evaluaciones_reporte)
+    n = n1 + n2
     total = 0
     for eval in evaluaciones:
+        total += eval.ponderacion
+    for eval in evaluaciones_reporte:
         total += eval.ponderacion
     division = total/n
     modulo = division % 10
     total = int(division) if modulo < 5 else int(division+1) #round up when the decimal part is 5 or higher
     return total
 
-def letra(total):
-        if 90 <= total <= 100:
-            return 'A'
-        elif 80 <= total < 90:
-            return 'B'
-        elif 70 <= total < 80:
-            return 'C'
-        elif 60 <= total < 70:
-            return 'D'
-        elif total < 60:
-            return 'F'
+# def calificativo(total):
+#         if 90 <= total <= 100:
+#             return 'Excelente'
+#         elif 80 <= total < 90:
+#             return 'Muy Bueno'
+#         elif 70 <= total < 80:
+#             return 'Bueno'
+#         elif 60 <= total < 70:
+#             return 'Suficiente'
+#         elif total < 60:
+#             return 'Insuficiente'
+# Movido a template filters en template_tags
 
 class GeneratePdf(View):
     def get(self, request, *args, **kwargs):
         id = self.kwargs['id']
-        ev = Evaluacion.objects.get(pk=id)
-        programacion = Programacion.objects.get(pk=ev.programacion.id)
-        evaluaciones = Evaluacion.objects.filter(programacion=programacion.id)
+        programacion = Programacion.objects.get(pk=id)
+        evaluaciones = Evaluacion.objects.filter(programacion=programacion.id).filter(rubrica=programacion.rubrica)
+        evaluaciones_reporte = Evaluacion.objects.filter(programacion=programacion.id).filter(rubrica=programacion.rubrica_reporte)
         proyecto = Proyecto.objects.get(pk=programacion.proyecto.id)
-        total = calificacionFinal(evaluaciones)
-        ltr = letra(total)
-        context = {'eval': evaluaciones, 'prog': programacion, 'proyecto': proyecto, 'total': total, 'letra': ltr}
+        indicadores = IndicadorEvaluado.objects.all()
+        grupos = Grupo.objects.filter(rubrica=programacion.rubrica)
+        grupos_r = Grupo.objects.filter(rubrica=programacion.rubrica_reporte)
+        total = calificacionFinal(evaluaciones, evaluaciones_reporte)
+        valores = range(1, programacion.rubrica.valorIndicador+1)
+        valores_r = range(1, programacion.rubrica_reporte.valorIndicador+1)
+        context = {'eval': evaluaciones, 'eval_r': evaluaciones_reporte, 'prog': programacion, 'proyecto': proyecto, 'total': total, 'indicadores': indicadores, 'grupos': grupos, 'grupos_r': grupos_r, 'valores': valores, 'valores_r': valores_r}
         pdf = render_to_pdf('pdf_template.html', context)
         return HttpResponse(pdf, content_type='application/pdf')

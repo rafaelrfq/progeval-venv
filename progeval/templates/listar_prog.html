@@ -13,7 +13,7 @@
             <th>Fecha</th>
             <th>Hora</th>
             <th>Estado</th>
-            <th>Rúbrica</th>
+            <th>Rúbricas</th>
             <th>Presidente de Jurado</th>
             <th>Jurado</th>
             <th>Proyecto</th>
@@ -26,9 +26,9 @@
                 <tr>
                     {% if prog.eliminado == False %}
                         <td>{{prog.fecha|date:"d-m-Y"}}</td>
-                        <td>{{prog.hora}}</td>
+                        <td>{{prog.hora|time:"H:i"}}</td>
                         <td>{{prog.estado}}</td>
-                        <td>{{prog.rubrica}}</td>
+                        <td>{{prog.rubrica}} | {{prog.rubrica_reporte}}</td>
                         <td>{{prog.presidenteJurado}}</td>
                         <td>
                             <ul>

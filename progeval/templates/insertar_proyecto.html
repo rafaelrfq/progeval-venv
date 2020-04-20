@@ -10,8 +10,11 @@
     {{ form.non_field_errors }}
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-3">
             {{ form.nombre|as_crispy_field }}
+        </div>
+        <div class="col-md-3">
+            {{ form.numero_clase|as_crispy_field }}
         </div>
         <div class="col-md-4">
             {{ form.clasificacion|as_crispy_field }}

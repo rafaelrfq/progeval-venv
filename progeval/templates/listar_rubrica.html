@@ -28,7 +28,7 @@
                         <td>{{rubrica.fechaCreacion|date:"d-m-Y"}}</td>
                         <td>{{rubrica.activa|yesno:"Sí, No"}}</td>
                         <td>{{rubrica.valorIndicador}} puntos</td>
-                        <td>
+                        <td style="width: 35%;">
                             {% for grupo in grupos %}
                                 {% if grupo.rubrica_id == rubrica.id %}
                                     <b>{{ grupo.nombre }} ({{ grupo.peso }} puntos)</b>

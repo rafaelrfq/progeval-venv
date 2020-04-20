@@ -1,4 +1,6 @@
 {% load static %}
+{% load calificativo %}
+
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -14,6 +16,7 @@
             font-weight: bold;
             margin-top: 0px;
             margin-bottom: 0px;
+            line-height: normal;
         }
         .header {
             font-size: 20px;
@@ -54,11 +57,13 @@
             background-color: black;
             color: white;
             padding-left: 2px;
+            line-height: 1.1;
         }
         .table td{
             padding-top: 4px;
             padding-bottom: 0px;
             padding-left: 2px;
+            line-height: 1.1;
         }
         .table2{
             border-collapse: collapse;
@@ -71,11 +76,13 @@
             text-align: center;
             background-color: black;
             color: white;
+            line-height: 1.1;
         }
         .table2 td{
             padding-top: 4px;
             padding-bottom: 0px;
             text-align: center;
+            line-height: 1.1;
         }
         .table3{
             border-collapse: collapse;
@@ -95,6 +102,26 @@
             padding-bottom: 0px;
             text-align: center;
         }
+        .table4{
+            border-collapse: collapse;
+            border: 1px solid black;
+            font-size: medium;
+        }
+        .table4 th{
+            padding-top: 2px;
+            padding-bottom: 0px;
+            text-align: left;
+            background-color: black;
+            color: white;
+            padding-left: 2px;
+            line-height: 1.1;
+        }
+        .table4 td{
+            padding-top: 1px;
+            padding-bottom: 0px;
+            padding-left: 2px;
+            line-height: 1.1;
+        }
         .brand-image{
             opacity: .8;
             width: 360px;
@@ -106,9 +133,10 @@
             font-size: 4;
             font-weight: bold;
             text-align: center;
+            line-height: 1.2;
         }
         .parrafo2{
-            font-size: 4;
+            font-size: 3;
             margin-left: 1cm;
         }
     </style>
@@ -142,11 +170,12 @@
         Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
         Cómputo de la Evaluación: {{ total }}/100 <br>
     </p>
+    <br>
 
     <table class="table2" align="center">
         <tr>
             <th style="color: black; width: 23%;">_</th>
-            <th style="width: 25%;">Nombre</th>
+            <th style="width: 23%;">Nombre</th>
             <th style="width: 15%;">Calificativo</th>
             <th style="width: 29%;">Firma</th>
         </tr>
@@ -155,10 +184,10 @@
             <td>{{ prog.presidenteJurado }}</td>
             {% for ev in eval %}
                 {% if ev.juez == prog.presidenteJurado %}
-                  <td>{{ ev.ponderacion }} </td>
+                  <td>{{ ev.ponderacion|calificativo }} </td>
                 {% endif %}
             {% endfor %}
-            <td> </td>
+            <td>{{ prog.presidenteJurado.email }}</td>
         </tr>
         <tr>
             <td style="font-weight: bold;">2do Jurado</td>
@@ -167,10 +196,10 @@
             <td>{{ juez }}</td>
             {% for ev in eval %}
                 {% if ev.juez == juez %}
-                  <td>{{ ev.ponderacion }} </td>
+                  <td>{{ ev.ponderacion|calificativo }} </td>
                 {% endif %}
             {% endfor %}
-            <td> </td>
+            <td>{{ juez.email }}</td>
                 {% endif %}
             {% endfor %}
         </tr>
@@ -181,30 +210,192 @@
             <td>{{ juez }}</td>
             {% for ev in eval %}
                 {% if ev.juez == juez %}
-                  <td>{{ ev.ponderacion }} </td>
+                  <td>{{ ev.ponderacion|calificativo }} </td>
                 {% endif %}
             {% endfor %}
-            <td> </td>
+            <td>{{ juez.email }}</td>
                 {% endif %}
             {% endfor %}
         </tr>
     </table>
-    <br><br>
+    <br><br><br>
     <table class="table3" align="center">
         <tr>
             <td style="color: white; width: 45%;">_</td>
             <th style="width: 25%;">CALIFICACIÓN<br>FINAL</th>
-            <td style="width: 20%; border: 1px solid black;">{{ letra }} ({{ total }}/100)</td>
+            <td style="width: 20%; border: 1px solid black;">{{ total }}/100</td>
         </tr>
     </table>
 
     <br>
     <p style="text-align: right; padding-right: 1cm; font-size: 3;">
-        FIRMA DEL JURADO: ________________________
+        FIRMA DEL JURADO: __<u>{{prog.presidenteJurado.email}}</u>__
     </p>
     <br>
     <p class="parrafo2">
         Nota: Debe referirse a la rúbrica para evaluación de PFC. Considere los niveles de valoración, y el proceso de cálculo de la calificación.
     </p>
+
+<!-- ----------------------------------------- -->
+<!-- Formulario de Evaluación de presentación -->
+<!-- ----------------------------------------- -->
+
+    {% for evaluacion in eval %}
+    <div> 
+        <pdf:nextpage /> 
+    </div>
+    <br>
+    <h1 class="titulo">PONTIFICIA UNIVERSIDAD CATÓLICA MADRE Y MAESTRA</h1>
+    <h2 class="titulo">FACULTAD DE CIENCIAS E INGENIERÍA</h2>
+    <h3 class="titulo">Escuela de Ingeniería en Computación y Telecomunicaciones</h3>
+    <p class="parrafo">Proyecto de Fin de Carrera<br>Formulario de Evaluación</p>
+
+    <p class="parrafo2">Sustentante(s):</p>
+    <table class="table" align="center">
+        <tr>
+            <th style="width: 60%;">Nombre</th>
+            <th style="width: 30%;">Matrícula</th>
+        </tr>
+        {% for integrante in proyecto.equipo.all %}
+            <tr>
+                <td>{{ integrante.nombre }} {{ integrante.apellido }}</td>
+                <td>{{ integrante.matricula }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <p class="parrafo2">
+        Asesor(a): {{ proyecto.asesor }}<br>
+        Título del PFC: {{ proyecto.nombre }}<br>
+        Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
+        Jurado: {{ evaluacion.juez }}
+    </p>
+    <p class="parrafo" style="text-decoration: underline;">Ficha de Evaluación:</p>
+
+    {% for grupo in grupos %}
+    <table class="table4" align="center">
+        <tr>
+            <th style="width: 60%; text-align: center;">{{grupo.nombre}} ({{grupo.peso}} puntos)</th>
+            <th colspan="{{prog.rubrica.valorIndicador}}" style="width: 30%; text-align: center;">Evaluación</th>
+        </tr>
+        {% for indicador in grupo.items.all %}
+            {% for indEval in indicadores %}
+                {% if indEval.evaluacion == evaluacion %}
+                {% if indEval.indicador.id == indicador.id %}
+                    <tr>
+                        <td style="width: 65%;">{{indEval.indicador.titulo}}</td>
+                        {% for valor in valores %}
+                            {% if valor == indEval.ponderacion %}
+                                <td style="background-color: black; color: white; border: 1px solid white; width: 5%; text-align: center; padding-left: 0px;">{{valor}}</td>
+                            {% else %}
+                                <td style="width: 5%; padding-left: 0px; text-align: center;">{{valor}}</td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </table>
+    {% endfor %}
+    <p class="parrafo2">
+        <b>Observaciones:</b> {{evaluacion.observaciones}}
+    </p>
+
+    <table class="table3" align="center">
+        <tr>
+            <td style="color: white; width: 45%;">_</td>
+            <th style="width: 25%;">CALIFICATIVO:</th>
+            <td style="width: 20%; border: 1px solid black;">{{ evaluacion.ponderacion|calificativo }}</td>
+        </tr>
+    </table>
+
+    <br>
+    <p style="text-align: right; padding-right: 1cm; font-size: 3;">
+        FIRMA DEL JURADO: __<u>{{evaluacion.juez.email}}</u>__
+    </p>
+     {% endfor %}
+
+<!-- ----------------------------------- -->
+<!-- Formulario de Evaluación de reporte -->
+<!-- ----------------------------------- -->
+
+    {% for evaluacion in eval_r %}
+        <div> 
+            <pdf:nextpage /> 
+        </div>
+        <br>
+        <h1 class="titulo">PONTIFICIA UNIVERSIDAD CATÓLICA MADRE Y MAESTRA</h1>
+        <h2 class="titulo">FACULTAD DE CIENCIAS E INGENIERÍA</h2>
+        <h3 class="titulo">Escuela de Ingeniería en Computación y Telecomunicaciones</h3>
+        <p class="parrafo">Proyecto de Fin de Carrera<br>Formulario de Evaluación Reporte Final</p>
+
+        <p class="parrafo2">Sustentante(s):</p>
+        <table class="table" align="center">
+            <tr>
+                <th style="width: 60%;">Nombre</th>
+                <th style="width: 30%;">Matrícula</th>
+            </tr>
+            {% for integrante in proyecto.equipo.all %}
+                <tr>
+                    <td>{{ integrante.nombre }} {{ integrante.apellido }}</td>
+                    <td>{{ integrante.matricula }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <p class="parrafo2">
+            Asesor(a): {{ proyecto.asesor }}<br>
+            Título del PFC: {{ proyecto.nombre }}<br>
+            Fecha de presentación: {{ prog.fecha|date:"d-m-Y" }}<br>
+            Jurado: {{ evaluacion.juez }}
+        </p>
+        <p class="parrafo" style="text-decoration: underline;">Ficha de Evaluación:</p>
+
+        {% for grupo in grupos_r %}
+        <table class="table4" align="center">
+            <tr>
+                <th style="width: 60%; text-align: center;">{{grupo.nombre}} ({{grupo.peso}} puntos)</th>
+                <th colspan="{{prog.rubrica_reporte.valorIndicador}}" style="width: 30%; text-align: center;">Evaluación</th>
+            </tr>
+            {% for indicador in grupo.items.all %}
+                {% for indEval in indicadores %}
+                    {% if indEval.evaluacion == evaluacion %}
+                    {% if indEval.indicador.id == indicador.id %}
+                        <tr>
+                            <td style="width: 60%;">{{indEval.indicador.titulo}}</td>
+                            {% for valor in valores_r %}
+                                {% if valor == indEval.ponderacion %}
+                                    <td style="background-color: black; color: white; border: 1px solid white; width: 3%; text-align: center; padding-left: 0px;">{{valor}}</td>
+                                {% else %}
+                                    <td style="width: 3%; padding-left: 0px; text-align: center;">{{valor}}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </table>
+        {% endfor %}
+        <p class="parrafo2">
+            <b>Observaciones:</b> {{evaluacion.observaciones}}
+        </p>
+        <br>
+
+        <table class="table3" align="center">
+            <tr>
+                <td style="color: white; width: 45%;">_</td>
+                <th style="width: 25%;">CALIFICATIVO:</th>
+                <td style="width: 20%; border: 1px solid black;">{{ evaluacion.ponderacion|calificativo }}</td>
+            </tr>
+        </table>
+
+        <br>
+        <p style="text-align: right; padding-right: 1cm; font-size: 3;">
+            FIRMA DEL JURADO: __<u>{{evaluacion.juez.email}}</u>__
+        </p>
+        
+    {% endfor %}
 </body>
 </html>

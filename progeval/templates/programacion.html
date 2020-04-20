@@ -48,19 +48,24 @@
             {{ form.estado|as_crispy_field }}
         </div>
         <div class="col-md-4">
-            {{ form.rubrica|as_crispy_field }}
+            {{ form.proyecto|as_crispy_field }}
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            <label>Jurado</label>
-            {{ form.jurado }}
+        <div class="col-md-4">
+            {{ form.rubrica|as_crispy_field }}
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
+            {{ form.rubrica_reporte|as_crispy_field }}
+        </div>
+        <div class="col-md-4">
             {{ form.presidenteJurado|as_crispy_field }}
         </div>
-        <div class="col-md-3">
-            {{ form.proyecto|as_crispy_field }}
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <label>Jurado</label>
+            {{ form.jurado }}
         </div>
     </div><br>
     <div class="row">

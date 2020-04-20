@@ -1,0 +1,49 @@
+{% extends "./base_prog.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+
+<br>
+<table class="table table-bordered" id="datatable" style="background-color: white;">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <th style="width: auto;">Proyecto</th>
+            <th style="width: auto;">Rúbricas</th>
+            <th style="width: auto;">Fecha y Hora Presentación</th>
+            <th style="width: auto;">Jurado</th>
+            <th style="width: 10%;">Ponderación</th>
+            <th style="width: 10%;">Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if listar_prog %}
+            {% for prog in listar_prog %}
+                <tr>
+                    {% if prog.eliminado == False %}
+                        <td>{{prog.proyecto}}</td>
+                        <td>{{prog.rubrica}} & {{prog.rubrica_reporte}}</td>
+                        <td>{{prog.fecha|date:"d-m-Y"}} {{prog.hora|time:"H:i"}}</td>
+                        <td>
+                            <ul>
+                                <li>{{prog.presidenteJurado}} (presidente)</li>
+                            {% for integrante in prog.jurado.all %}
+                                <li>{{ integrante }}</li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        <td>{{prog.ponderacion}}</td>
+                        <td align="center">
+                            <a href="{% url 'pdf_view' prog.id %}" target="_blank" class="btn btn-outline-danger" title="Exportar a PDF"><i class="far fa-file-pdf"></i></a>
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" align="center">No hay datos disponibles.</td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+
+{% endblock content %}

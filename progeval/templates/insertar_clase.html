@@ -1,4 +1,4 @@
-{% extends "./base_prog.html" %}
+{% extends './base_prog.html' %}
 {% load crispy_forms_tags %}
 
 {% block content %}
@@ -10,27 +10,18 @@
             {{ form.nombre|as_crispy_field }}
         </div>
         <div class="col-md-6">
-            {{ form.apellido|as_crispy_field }}
+            {{ form.numero|as_crispy_field }}
         </div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            {{ form.email|as_crispy_field }}
-        </div>
-        <div class="col-md-6">
-            {{ form.dept|as_crispy_field }}
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-5">
             <button type="submit" class="btn btn-success btn-block btn-lg"><i class="fas fa-database"></i>
                 Registrar
             </button>
         </div>
-        <div class="col-md-4">
-            <a href="{% url 'usuario_list' %}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-list"></i>
-                Volver a lista de Usuarios
+        <div class="col-md-7">
+            <a href="{% url 'clase_list' %}" class="btn btn-secondary btn-block btn-lg"><i class="fas fa-list"></i>
+                Ir a lista de clases
             </a>
         </div>
     </div>

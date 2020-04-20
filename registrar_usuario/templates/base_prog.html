@@ -250,7 +250,7 @@
       <!-- Notifications Dropdown Menu -->
     </ul>
     <span class="usuarionmb">Hola, {{request.user}}</span>
-    <span class="usuarionmb"><a href="{% url 'usuario_logout' %}">Cerrar sesión</a></span>
+    <span class="usuarionmb"><a href="{% url 'usuario_logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></span>
   </nav>
   <!-- /.navbar -->
 
@@ -376,9 +376,32 @@
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-book"></i>
+              <p>
+                Clases
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'coord_clase' %}" class="nav-link">
+                  <i class="nav-icon fas fa-database"></i>
+                  <p>Insertar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'clase_list' %}" class="nav-link">
+                  <i class="nav-icon fas fa-list"></i>
+                  <p>Listar</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-clipboard-list"></i>
               <p>
-                Rúbrica
+                Rúbricas
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
@@ -386,7 +409,7 @@
               <li class="nav-item">
                 <a href="{% url 'rubrica_list' %}" class="nav-link">
                   <i class="nav-icon fas fa-clipboard"></i>
-                  <p>Rúbricas</p>
+                  <p>Rúbrica</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -397,21 +420,51 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a href="{% url 'prog_list' %}" class="nav-link">
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tasks"></i>
               <p>
-                Programación
+                Programaciones
+                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'coord_prog' %}" class="nav-link">
+                  <i class="nav-icon fas fa-database"></i>
+                  <p>Registrar</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'prog_list' %}" class="nav-link">
+                  <i class="fas fa-list nav-icon"></i>
+                  <p>Listar</p>
+                </a>
+              </li>
+            </ul>
           </li>
-          <li class="nav-item">
-            <a href="{% url 'coord_eval_list' %}" class="nav-link">
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-clipboard-check"></i>
               <p>
                 Evaluaciones
+                <i class="fas fa-angle-left right"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'coord_eval_list' %}" class="nav-link">
+                  <i class="nav-icon fas fa-clipboard-list"></i>
+                  <p>Por jurado</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{% url 'coord_prog_eval' %}" class="nav-link">
+                  <i class="fas fa-clipboard-list nav-icon"></i>
+                  <p>Por programación</p>
+                </a>
+              </li>
+            </ul>
           </li>
         </ul>
       </nav>

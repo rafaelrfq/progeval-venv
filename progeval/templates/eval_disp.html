@@ -28,7 +28,7 @@
                 <tr>
                     {% if prog.eliminado == False %}
                         <td>{{prog.fecha|date:"d-m-Y"}}</td>
-                        <td>{{prog.hora}}</td>
+                        <td>{{prog.hora|time:"H:i"}}</td>
                         <td>{{prog.estado}}</td>
                         <td>{{prog.rubrica}}</td>
                         <td>{{prog.presidenteJurado}}</td>
@@ -41,9 +41,7 @@
                         </td>
                         <td>{{prog.proyecto}}</td>
                         <td>
-                            <a href="{% url 'evaluacion' prog.id %}" class="btn btn-outline-success"><i class="fas fa-clipboard-check"></i>
-                                Evaluar
-                            </a>
+                            <a href="{% url 'evaluacion' prog.id %}" class="btn btn-outline-success" title="Evaluar Presentación y Reporte"><i class="fas fa-clipboard-check"></i></a>
                         </td>
                     {% endif %}
                 </tr>

@@ -12,6 +12,7 @@
     <thead class="border-bottom font-weight-bold">
         <tr>
             <th>Nombre</th>
+            <th># de Clase</th>
             <th>Clasificación</th>
             <th>Asesor</th>
             <th>Equipo</th>
@@ -24,8 +25,9 @@
                 <tr>
                     {% if proyecto.eliminado == False %}
                         <td>{{proyecto.nombre}}</td>
+                        <td>{{proyecto.numero_clase}}</td>
                         <td>
-                            <ul style="list-style-type:none;">
+                            <ul>
                             {% for clasif in proyecto.clasificacion.all %}
                                 <li>{{ clasif }}</li>
                             {% endfor %}

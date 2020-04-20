@@ -13,6 +13,7 @@ urlpatterns = [
     path('coord/programacion/delete/<int:id>/', views.delete_prog, name='prog_delete'), #delete existing
     path('coord/programacion/listar', views.listar_prog, name='prog_list'), #program listing
     #evaluaciones
+    path('coord/prog_evaluadas', views.listar_prog_eval, name='coord_prog_eval'), #prog eval listing
     path('coord/evaluaciones', views.listar_eval_coord, name='coord_eval_list'), #evaluation listing
     #proyecto
     path('coord/proyecto', views.insertar_proyecto, name='coord_proyecto'), #project creation
@@ -29,10 +30,15 @@ urlpatterns = [
     path('coord/estudiante/<int:id>/', views.insertar_estudiante, name='estudiante_update'), #edit existing student
     path('coord/estudiante/delete/<int:id>/', views.delete_estudiante, name='estudiante_delete'), #delete existing
     path('coord/estudiante/listar', views.listar_estudiante, name='estudiante_list'), #student listing
+    # clase
+    path('coord/clase', views.insertar_clase, name='coord_clase'), #class creation
+    path('coord/clase/<int:id>/', views.insertar_clase, name='clase_update'), #edit existing class
+    path('coord/clase/delete/<int:id>/', views.delete_clase, name='clase_delete'), #delete existing class
+    path('coord/clase/listar', views.listar_clase, name='clase_list'), #class listing
     #carrera
     path('coord/carrera', views.insertar_carrera, name='coord_carrera'), #career creation
     path('coord/carrera/<int:id>/', views.insertar_carrera, name='carrera_update'), #edit existing career
-    path('coord/carrera/delete/<int:id>/', views.delete_carrera, name='carrera_delete'), #delete existing
+    path('coord/carrera/delete/<int:id>/', views.delete_carrera, name='carrera_delete'), #delete existing career
     path('coord/carrera/listar', views.listar_carrera, name='carrera_list'), #career listing
     #rubrica
     path('coord/rubrica', views.insertar_rubrica, name='coord_rub'), #rubrica creation
@@ -47,6 +53,7 @@ urlpatterns = [
     #paths del jurado
     path('jurado/eval_disp', views.evaluaciones_disp, name='eval_disp'), #available evaluations
     path('jurado/evaluacion/<int:id>/', views.evaluacion, name='evaluacion'), #evaluation
+    path('jurado/evaluacion_r/<int:id>/', views.evaluacion_reporte, name='evaluacion_reporte'), #report evaluation
     path('jurado/evaluacion/listar', views.listar_evaluacion, name='eval_list'), #evaluation
     path('jurado/evaluacion/ficha/<int:id>', views.ficha_evaluacion, name='eval_ficha'), #evaluation
     #path de PDF

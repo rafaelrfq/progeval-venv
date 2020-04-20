@@ -9,11 +9,12 @@ class UsuarioForm(forms.ModelForm):
 
     class Meta:
         model = Usuario
-        fields = ('nombre', 'apellido', 'email')
+        fields = ('nombre', 'apellido', 'email', 'dept')
         labels = {
             'nombre':"Nombre",
             'apellido':"Apellido",
-            'email': "Correo Académico"
+            'email': "Correo Académico",
+            'dept': "Departamento"
         }
 
 class FirstUsuarioForm(forms.ModelForm):

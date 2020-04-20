@@ -1,7 +1,6 @@
 from django.db import models
 from registrar_usuario.models import Usuario, Persona
 import datetime
-from django.utils import timezone
 
 ESTADO = [
     ('', '--Seleccione--'),
@@ -9,6 +8,15 @@ ESTADO = [
     ('Cancelada', 'Cancelada'),
     ('Pospuesta', 'Pospuesta'),
 ]
+
+class Clase(models.Model):
+    nombre = models.CharField(max_length=100)
+    numero = models.CharField(max_length=25)
+    eliminado = models.BooleanField(default=False)
+
+    def __str__(self):
+        nomb = self.nombre + ' (' + self.numero + ')'
+        return nomb
 
 class Carrera(models.Model):
     nombre = models.CharField(max_length=100)
@@ -23,7 +31,7 @@ class Estudiante(Persona):
     matricula = models.CharField(max_length=9, unique=True)
     eliminado = models.BooleanField(default=False)
     email = models.EmailField(unique=True)
-    numero_clase = models.CharField(max_length=70)
+    numero_clase = models.ForeignKey(Clase, on_delete=models.CASCADE)
     ciclo = models.CharField(max_length=50)
     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
 
@@ -71,10 +79,12 @@ class Proyecto(models.Model):
     clasificacion = models.ManyToManyField(Clasificacion)
     equipo = models.ManyToManyField(Estudiante)
     asesor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    numero_clase = models.ForeignKey(Clase, on_delete=models.CASCADE)
     eliminado = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.nombre
+        nomb = self.nombre + ' - (' + self.numero_clase.numero + ')'
+        return nomb
 
 class Estado(models.Model):
     nombre = models.CharField(max_length=35)
@@ -85,12 +95,14 @@ class Estado(models.Model):
 
 class Programacion(models.Model):
     fecha = models.DateField(default=datetime.date.today)
-    hora = models.TimeField(default=timezone.now)
+    hora = models.TimeField(default=datetime.datetime.now)
     estado = models.CharField(max_length=100, choices=ESTADO)
     rubrica = models.ForeignKey(Rubrica, on_delete=models.CASCADE)
+    rubrica_reporte = models.ForeignKey(Rubrica, on_delete=models.CASCADE, related_name='rub_reporte')
     presidenteJurado = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='presidente')
     jurado = models.ManyToManyField(Usuario)
     proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
+    ponderacion = models.PositiveIntegerField(null=True, blank=True)
     eliminado = models.BooleanField(default=False)
 
     def __str__(self):
@@ -101,12 +113,13 @@ class Evaluacion(models.Model):
     programacion = models.ForeignKey(Programacion, on_delete=models.CASCADE)
     ponderacion = models.PositiveIntegerField()
     observaciones = models.TextField(max_length=1000)
+    hora = models.TimeField(default=datetime.datetime.now)
     eliminado = models.BooleanField(default=False)
     juez = models.ForeignKey(Usuario, on_delete=models.CASCADE)
 
     @classmethod
-    def create(cls, rubrica, programacion, ponderacion, observaciones, juez):
-        eval = cls(rubrica=rubrica, programacion=programacion, ponderacion=ponderacion, observaciones=observaciones, juez=juez)
+    def create(cls, rubrica, programacion, ponderacion, observaciones, hora, juez):
+        eval = cls(rubrica=rubrica, programacion=programacion, ponderacion=ponderacion, observaciones=observaciones, hora=hora, juez=juez)
         # we could filter data here if necessary
         return eval
 
